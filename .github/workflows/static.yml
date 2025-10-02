@@ -27,16 +27,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # Prepara o artefacto: torna a page.html a homepage e adiciona .nojekyll
-      - name: Prepare artifact
-        run: |
-          mkdir public
-          cp page.html public/index.html
-          # (Opcional) Domínio custom:
-          # echo "promo.teudominio.pt" > public/CNAME
-          touch public/.nojekyll
-
-      - name: Upload artifact
+      - name: Upload artifact (public/)
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'public'
