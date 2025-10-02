@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt">
+<meta charset="utf-8" />
+<title>Submissão de Fatura</title>
+<form id="leadForm">
+  <input name="nome" placeholder="Nome" required>
+  <input name="email" type="email" placeholder="Email" required>
+  <input name="nif" pattern="\\d{9}" placeholder="NIF (9 dígitos)" required>
+  <input name="telefone" placeholder="Telefone">
+  <input name="fatura" type="file" accept=".pdf,image/*" required>
+  <button type="submit">Submeter</button>
+  <p id="msg"></p>
+</form>
+<script>
+const form = document.getElementById('leadForm');
+const msg = document.getElementById('msg');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = form.fatura.files[0];
+  if (!f) return;
+
+  // validação básica de tamanho/tipo
+  const maxMB = 10;
+  if (f.size > maxMB*1024*1024) return msg.textContent = `Ficheiro excede ${maxMB}MB`;
+  const okTypes = ['application/pdf','image/jpeg','image/png'];
+  if (!okTypes.includes(f.type)) return msg.textContent = 'Só PDF/JPG/PNG';
+
+  const data = new FormData(form);
+  msg.textContent = 'A enviar...';
+
+  try {
+    const res = await fetch('https://api.teu-dominio.pt/v1/submeter', {
+      method: 'POST',
+      body: data,
+      // não definas headers Content-Type com FormData
+      credentials: 'omit',
+    });
+    if (!res.ok) throw new Error(await res.text());
+    msg.textContent = 'Submetido com sucesso!';
+    form.reset();
+  } catch (err) {
+    msg.textContent = 'Falha no envio: ' + (err.message || err);
+  }
+});
+</script>
+</html>
