@@ -1,12 +1,17 @@
 <!DOCTYPE html>
-
 <html lang="pt">
-<head>
+  <head>
+    <!-- intl-tel-input CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
   <meta charset="UTF-8">
   <title>Campanha OPPO</title>
+
+  <!-- Importar Montserrat do Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Montserrat', sans-serif;
       background: #f4f4f9;
       display: flex;
       justify-content: center;
@@ -14,92 +19,305 @@
       height: 100vh;
       margin: 0;
     }
+
+    /* Wrapper para dividir imagem e formulário */
+    .wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px; /* espaço entre imagem e form */
+      max-width: 1100px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .wrapper img {
+      max-width: 400px;
+      height: auto;
+    }
+
     .container {
       background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-      width: 400px;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
+      width: 500px; /* form mais largo */
     }
+
     h2 {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       color: #2b2d42;
+      font-weight: 300; /* light */
     }
+
     label {
       display: block;
-      margin-top: 10px;
-      font-weight: bold;
+      margin-top: 15px;
       color: #444;
+      font-weight: 400;
     }
+
     input, select {
-      width: 95.5%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-    input[type="file"] {
-        width: 100%;
-        border: none;
-    }
-    button {
-      margin-top: 20px;
       width: 100%;
-      padding: 12px;
+      padding: 12px 24px 12px 12px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    input[type="file"] {
+        border: none;
+        padding: 0;
+    }
+
+    button {
+      font-family: 'Montserrat', sans-serif;
+      margin-top: 25px;
+      width: 100%;
+      padding: 14px;
       background: #00a884;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
+      font-weight: 600;
     }
+
     button:hover {
       background: #008f72;
     }
+
     .success {
+      font-family: 'Montserrat', sans-serif;
       text-align: center;
-      margin-top: 15px;
+      margin-top: 18px;
       color: green;
-      font-weight: bold;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="https://logodownload.org/wp-content/uploads/2021/03/oppo-logo-0.png" alt="Oppo Logo" width="32" height="32">
-    <h2>Campanha OPPO</h2>
-    <form id="oppoForm">
-      <label for="nome">Nome:</label>
-      <input type="text" id="nome" name="nome" required>
 
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" required>
+  <div class="wrapper">
+    <!-- Imagem lado esquerdo -->
+    <img src="https://logodownload.org/wp-content/uploads/2021/03/oppo-logo-0.png" alt="Oppo Logo">
 
-  <label for="telefone">Telefone:</label>
-  <input type="tel" id="telefone" name="telefone" required>
+    <!-- Form lado direito -->
+    <div class="container">
+      <h2>Campanha de ofertas OPPO</h2>
+      <form id="oppoForm">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
 
-  <label for="morada">Morada:</label>
-  <input type="text" id="morada" name="morada" required>
+        <label for="email_local">Email:</label>
+        <div style="display: flex; gap: 8px; align-items: center; position:relative;">
+          <input type="text" id="email_local" name="email_local" required style="flex:2;" placeholder="utilizador">
+          <span style="font-weight:600;">@</span>
+          <div style="flex:2; position:relative;">
+            <input type="text" id="email_domain" name="email_domain" required style="width:100%;" placeholder="domínio" autocomplete="off">
+            <ul id="email_suggestions" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; border:1px solid #ccc; border-radius:0 0 8px 8px; z-index:10; list-style:none; margin:0; padding:0; max-height:150px; overflow-y:auto;">
+              <li style="padding:8px; cursor:pointer; display:flex; align-items:center; gap:8px;" data-value="gmail.com">
+                <img src="https://img.icons8.com/color/48/000000/gmail-new.png" alt="Gmail" style="width:20px;height:20px;"> gmail.com
+              </li>
+              <li style="padding:8px; cursor:pointer; display:flex; align-items:center; gap:8px;" data-value="hotmail.com">
+                <img src="https://img.icons8.com/color/48/000000/ms-outlook.png" alt="Hotmail" style="width:20px;height:20px;"> hotmail.com
+              </li>
+              <li style="padding:8px; cursor:pointer; display:flex; align-items:center; gap:8px;" data-value="outlook.com">
+                <img src="https://img.icons8.com/color/48/000000/ms-outlook.png" alt="Outlook" style="width:20px;height:20px;"> outlook.com
+              </li>
+              <li style="padding:8px; cursor:pointer; display:flex; align-items:center; gap:8px;" data-value="yahoo.com">
+                <img src="https://img.icons8.com/color/48/000000/yahoo.png" alt="Yahoo" style="width:20px;height:20px;"> yahoo.com
+              </li>
+              <li style="padding:8px; cursor:pointer; display:flex; align-items:center; gap:8px;" data-value="icloud.com">
+                <img src="https://img.icons8.com/color/48/000000/icloud.png" alt="iCloud" style="width:20px;height:20px;"> icloud.com
+              </li>
+              <li style="padding:8px; cursor:pointer; display:flex; align-items:center; gap:8px;" data-value="live.com">
+                <img src="https://img.icons8.com/color/48/000000/ms-outlook.png" alt="Live" style="width:20px;height:20px;"> live.com
+              </li>
+            </ul>
+          </div>
+        </div>
+
+  <label for="telefone" style="padding-bottom:6px;display:block;">Telefone:</label>
+  <input type="tel" id="telefone" name="telefone" required style="padding-left:50px;width:100%;box-sizing:border-box;">
+
+        <label for="rua">Rua:</label>
+        <input type="text" id="rua" name="rua" required>
+
+        <div style="display:flex; gap:8px;">
+          <div style="flex:1; min-width:90px;">
+            <label for="porta">Nº da porta:</label>
+            <input type="text" id="porta" name="porta" required maxlength="10" pattern="[A-Za-z0-9\s]+">
+          </div>
+          <div style="flex:1; min-width:90px;">
+            <label for="andar">Andar:</label>
+            <input type="text" id="andar" name="andar" maxlength="10" pattern="[A-Za-z0-9\s]+" placeholder="(opcional)">
+          </div>
+          <div style="flex:1.2; min-width:120px;">
+            <label for="codigo_postal">Código Postal:</label>
+            <input type="text" id="codigo_postal" name="codigo_postal" required maxlength="8" pattern="\d{4}-\d{3}" placeholder="0000-000" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9\-]/g,'')">
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <div style="flex:1; min-width:90px;">
+            <label for="localidade">Localidade:</label>
+            <input type="text" id="localidade" name="localidade" required maxlength="30">
+          </div>
+          <div style="flex:1; min-width:90px;">
+            <label for="pais" style="padding-bottom:6px;display:block;">País:</label>
+              <input type="text" id="pais" name="pais" required>            
+          </div>
+        </div>
 
   <label for="loja">Loja onde comprou:</label>
-  <input type="text" id="loja" name="loja" required>
+  <select id="loja" name="loja" required></select>
 
-  <label for="fatura">Upload da Fatura:</label>
-  <input type="file" id="fatura" name="fatura" accept=".jpg,.png,.pdf" required>
 
-  <button type="submit">Submeter</button>
-</form>
-<p class="success" id="successMsg" style="display:none;">Formulário enviado com sucesso!</p>
+  <label for="fatura">Nº/Referência da Fatura:</label>
+  <input type="text" id="fatura" name="fatura" required>
 
+  <label for="data_compra">Data da Compra:</label>
+  <input type="date" id="data_compra" name="data_compra" required>
+
+  <label for="file">Upload da Fatura:</label>
+  <input type="file" id="file" name="file" accept=".jpg,.png,.pdf">
+  <br><br>
+        <div >
+          <input type="checkbox" id="aceito_rgpd" name="aceito_rgpd" required>
+          <label for="aceito_rgpd" style="font-size:15px;">
+            Li e aceito os <a href="https://www.cnpd.pt/cidadaos/rgpd/" target="_blank" style="color:#00a884;text-decoration:underline;">termos e condições RGPD</a>
+          </label>
+        </div>
+        <button type="submit">Submeter</button>
+      </form>
+  <p class="success" id="successMsg" style="display:none;"></p>
+    </div>
   </div>
 
+  <!-- intl-tel-input JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  <!-- jQuery (necessário para country-select-js) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- country-select-js CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/country-select-js@2.0.1/build/css/countrySelect.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/country-select-js@2.0.1/build/js/countrySelect.min.js"></script>
   <script>
+    // Inicializar intl-tel-input
+    const telInput = document.querySelector("#telefone");
+    const iti = window.intlTelInput(telInput, {
+      initialCountry: "pt",
+      separateDialCode: true,
+      preferredCountries: ["pt", "es", "fr", "gb"],
+      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+    });
+    // Carregar lojas do endpoint
+    fetch('http://localhost:8000/api/externos/campanhaoppo/lojas')
+      .then(res => res.json())
+      .then(data => {
+        const select = document.getElementById('loja');
+        select.innerHTML = '';
+        data.lojas.forEach(loja => {
+          const option = document.createElement('option');
+          option.value = loja.value;
+          option.textContent = loja.label;
+          select.appendChild(option);
+        });
+      });
+
+    // Inicializar country-select-js para o campo país
+    $(function() {
+      $('#pais').countrySelect({
+        defaultCountry: 'pt',
+        preferredCountries: ['pt', 'es', 'fr', 'gb', 'de', 'br']
+      });
+    });
+
+    // Email suggestions dropdown logic
+    const emailDomainInput = document.getElementById("email_domain");
+    const emailSuggestions = document.getElementById("email_suggestions");
+    emailDomainInput.addEventListener("focus", function() {
+      emailSuggestions.style.display = "block";
+    });
+    emailDomainInput.addEventListener("input", function() {
+      const val = this.value.toLowerCase();
+      let hasVisible = false;
+      Array.from(emailSuggestions.children).forEach(li => {
+        if (li.dataset.value.startsWith(val) || val === "") {
+          li.style.display = "block";
+          hasVisible = true;
+        } else {
+          li.style.display = "none";
+        }
+      });
+      emailSuggestions.style.display = hasVisible ? "block" : "none";
+    });
+    emailDomainInput.addEventListener("blur", function() {
+      setTimeout(() => { emailSuggestions.style.display = "none"; }, 150);
+    });
+    Array.from(emailSuggestions.children).forEach(li => {
+      li.addEventListener("mousedown", function(e) {
+        emailDomainInput.value = this.dataset.value;
+        emailSuggestions.style.display = "none";
+      });
+    });
+
     document.getElementById("oppoForm").addEventListener("submit", function(event) {
-      event.preventDefault(); // impede refresh
-      document.getElementById("successMsg").style.display = "block";
-      this.reset(); // limpa formulário
+      event.preventDefault();
+      const formData = new FormData(this);
+  // Substituir o valor do telefone pelo formato internacional
+  formData.set("telefone", iti.getNumber());
+  // Email: juntar local e domínio
+  const emailLocal = document.getElementById("email_local").value.trim();
+  formData.set("email", emailLocal + "@" + emailDomainInput.value.trim());
+  formData.delete("email_local");
+  formData.delete("email_domain");
+  // Morada: juntar todos os campos num só string
+  const rua = document.getElementById("rua").value.trim();
+  const porta = document.getElementById("porta").value.trim();
+  const andar = document.getElementById("andar").value.trim();
+  const codigo_postal = document.getElementById("codigo_postal").value.trim();
+  const localidade = document.getElementById("localidade").value.trim();
+  const pais = document.getElementById("pais").value.trim();
+  let morada = `${rua}, Nº ${porta}`;
+  if (andar) morada += `, Andar ${andar}`;
+  morada += `, ${codigo_postal} ${localidade}, ${pais}`;
+  formData.set("morada", morada);
+  formData.delete("rua");
+  formData.delete("porta");
+  formData.delete("andar");
+  formData.delete("codigo_postal");
+  formData.delete("localidade");
+  formData.delete("pais");
+
+      fetch('http://localhost:8000/api/externos/campanhaoppo', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        const msg = document.getElementById("successMsg");
+        if (data.status === 'ok') {
+          msg.textContent = "Formulário enviado com sucesso!";
+          msg.style.color = "green";
+          msg.style.display = "block";
+          document.getElementById("oppoForm").reset();
+        } else {
+          msg.textContent = "Erro: " + JSON.stringify(data.errors);
+          msg.style.color = "red";
+          msg.style.display = "block";
+        }
+      })
+      .catch(() => {
+        const msg = document.getElementById("successMsg");
+        msg.textContent = "Erro ao submeter. Tente novamente.";
+        msg.style.color = "red";
+        msg.style.display = "block";
+      });
     });
   </script>
 
