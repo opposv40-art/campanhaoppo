@@ -43,6 +43,7 @@
       border-radius: 16px;
       box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
       width: 500px; /* form mais largo */
+      transform: scale(0.85);
     }
 
     h2 {
@@ -99,9 +100,35 @@
       color: green;
       font-weight: 600;
     }
+
+    /* Modal */
+    .modal {
+      display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+      justify-content: center; align-items: center;
+    }
+    .modal-content {
+      background: white; padding: 30px; border-radius: 12px;
+      text-align: center; max-width: 400px; width: 90%;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+    }
+    .modal-content p { margin-bottom: 20px; color: #333; font-weight: 500; }
+    .modal-content button {
+      background: #00a884; border: none; color: white;
+      padding: 10px 20px; border-radius: 8px; cursor: pointer;
+    }
+    .modal-content button:hover { background: #008f72; }
   </style>
 </head>
 <body>
+  <!-- Modal -->
+  <div id="errorModal" class="modal">
+    <div class="modal-content">
+      <p id="modalMessage"></p>
+      <button id="modalClose">OK</button>
+    </div>
+  </div>
+
   <div class="wrapper">
     <!-- Imagem lado esquerdo -->
     <img src="https://logodownload.org/wp-content/uploads/2021/03/oppo-logo-0.png" alt="Oppo Logo">
@@ -207,8 +234,44 @@
       preferredCountries: ["pt", "es", "fr", "gb"],
       utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
     });
+
+    // Impedir letras no campo telefone
+    telInput.addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^0-9+\s()-]/g, '');
+    });
+
+    // Impedir caracteres especiais no campo nome
+    const nomeInput = document.getElementById('nome');
+    nomeInput.addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+    });
+
+    // Impedir vírgulas nos campos de email
+    const emailLocalInput = document.getElementById('email_local');
+    const emailDomainInput2 = document.getElementById('email_domain');
+    emailLocalInput.addEventListener('input', function(e) {
+      this.value = this.value.replace(/,/g, '');
+    });
+    emailDomainInput2.addEventListener('input', function(e) {
+      this.value = this.value.replace(/,/g, '');
+    });
+
+    // Impedir caracteres especiais em rua, código postal e localidade
+    const ruaInput = document.getElementById('rua');
+    const codigoPostalInput = document.getElementById('codigo_postal');
+    const localidadeInput = document.getElementById('localidade');
+
+    ruaInput.addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^A-Za-zÀ-ÿ0-9\s]/g, '');
+    });
+    codigoPostalInput.addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^0-9\s-]/g, '');
+    });
+    localidadeInput.addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^A-Za-zÀ-ÿ0-9\s]/g, '');
+    });
     // Carregar lojas do endpoint
-    fetch('https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/lojas')
+    fetch('http://localhost:8000/api/externos/campanhaoppo/lojas')
       .then(res => res.json())
       .then(data => {
         const select = document.getElementById('loja');
@@ -216,7 +279,7 @@
         data.lojas.forEach(loja => {
           const option = document.createElement('option');
           option.value = loja.value;
-          option.textContent = loja.label;
+          option.textContent = loja.value;
           select.appendChild(option);
         });
       });
@@ -285,12 +348,30 @@
       if (fileInput.files.length > 0) {
         formData.append("file", fileInput.files[0]);
       }
-      fetch('https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo', {
+      fetch('http://localhost:8000/api/externos/campanhaoppo', {
         method: 'POST',
         body: formData
       })
-      .then(res => res.json())
-      .then(data => {
+      .then(async res => {
+        if (res.status === 200) {
+          window.location.href = 'concluido.html'; // página de conclusão
+          return;
+        }
+        else {
+          if (res.status === 400) {
+            const errorData = await res.json();
+            const modal = document.getElementById("errorModal");
+            const modalMessage = document.getElementById("modalMessage");
+            modalMessage.textContent = errorData.detail || "Erro desconhecido.";
+            modal.style.display = "flex";
+            const modalClose = document.getElementById("modalClose");
+            modalClose.addEventListener("click", function() {
+              modal.style.display = "none";
+            });
+            return;
+          }
+        }
+        const data = await res.json();
         const msg = document.getElementById("successMsg");
         if (data.status === 'ok') {
           msg.textContent = "Formulário enviado com sucesso!";
