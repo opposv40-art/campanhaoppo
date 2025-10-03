@@ -171,16 +171,20 @@
         <select id="loja" name="loja" required></select>
         <label for="fatura">Nº/Referência da Fatura:</label>
         <input type="text" id="fatura" name="fatura" required>
-        <label for="data_compra">Data da Compra:</label>
-        <input type="date" id="data_compra" name="data_compra" required>
+  <label for="data_compra">Data e Hora da Fatura:</label>
+  <input type="datetime-local" id="data_compra" name="data_compra" required>
         <label for="file">Upload da Fatura:</label>
-        <input type="file" id="file" name="file" accept=".jpg,.png,.pdf">
+  <input type="file" id="file" name="file" accept=".jpg,.png,.pdf" required>
         <br><br>
-        <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 12px; justify-content: flex-start;">
-          <input type="checkbox" id="aceito_rgpd" name="aceito_rgpd" required style="margin:0;">
-          <label for="aceito_rgpd" style="font-size:15px; margin:0;">
-            Li e aceito os <a href="https://www.cnpd.pt/cidadaos/rgpd/" target="_blank" style="color:#00a884;text-decoration:underline;">termos e condições RGPD</a>
-          </label>
+        <div style="display:flex; gap:8px;">
+          <div style="flex:1; min-width:10px;; max-width:30px;">
+            <input type="checkbox" id="aceito_rgpd" name="aceito_rgpd" required class="rgpd-checkbox">
+          </div>
+          <div style="flex:1; min-width:150px; margin-top:-12px;">
+            <label for="aceito_rgpd" class="rgpd-label">
+              Li e aceito os <a href="https://www.cnpd.pt/cidadaos/rgpd/" target="_blank" style="color:#00a884;text-decoration:underline;">termos e condições RGPD</a>
+            </label>
+          </div>
         </div>
         <button type="submit">Submeter</button>
       </form>
@@ -204,7 +208,7 @@
       utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
     });
     // Carregar lojas do endpoint
-    fetch('http://localhost:8000/api/externos/campanhaoppo/lojas')
+    fetch('https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/lojas')
       .then(res => res.json())
       .then(data => {
         const select = document.getElementById('loja');
@@ -253,15 +257,9 @@
     });
     document.getElementById("oppoForm").addEventListener("submit", function(event) {
       event.preventDefault();
-      const formData = new FormData(this);
-      // Substituir o valor do telefone pelo formato internacional
-      formData.set("telefone", iti.getNumber());
-      // Email: juntar local e domínio
+      // Preparar dados para JSON
       const emailLocal = document.getElementById("email_local").value.trim();
-      formData.set("email", emailLocal + "@" + emailDomainInput.value.trim());
-      formData.delete("email_local");
-      formData.delete("email_domain");
-      // Morada: juntar todos os campos num só string
+      const emailDomainInput = document.getElementById("email_domain");
       const rua = document.getElementById("rua").value.trim();
       const porta = document.getElementById("porta").value.trim();
       const andar = document.getElementById("andar").value.trim();
@@ -271,14 +269,23 @@
       let morada = `${rua}, Nº ${porta}`;
       if (andar) morada += `, Andar ${andar}`;
       morada += `, ${codigo_postal} ${localidade}, ${pais}`;
-      formData.set("morada", morada);
-      formData.delete("rua");
-      formData.delete("porta");
-      formData.delete("andar");
-      formData.delete("codigo_postal");
-      formData.delete("localidade");
-      formData.delete("pais");
-      fetch('http://localhost:8000/api/externos/campanhaoppo', {
+      const data = {
+        nome: document.getElementById("nome").value.trim(),
+        email: emailLocal + "@" + emailDomainInput.value.trim(),
+        telefone: iti.getNumber(),
+        loja: document.getElementById("loja").value,
+        morada: morada,
+        fatura: document.getElementById("fatura").value.trim(),
+        data_compra: document.getElementById("data_compra").value
+      };
+      // Preparar formData para ficheiro
+      const fileInput = document.getElementById("file");
+      const formData = new FormData();
+      formData.append("data", JSON.stringify(data));
+      if (fileInput.files.length > 0) {
+        formData.append("file", fileInput.files[0]);
+      }
+      fetch('https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo', {
         method: 'POST',
         body: formData
       })
