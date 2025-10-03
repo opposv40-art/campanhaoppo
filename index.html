@@ -42,7 +42,7 @@
       padding: 40px;
       border-radius: 16px;
       box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
-      width: 500px; /* form mais largo */
+      min-width: 500px; /* form mais largo */
       transform: scale(0.85);
     }
 
@@ -118,6 +118,29 @@
       padding: 10px 20px; border-radius: 8px; cursor: pointer;
     }
     .modal-content button:hover { background: #008f72; }
+
+    .image-wrapper {
+      position: relative;
+    }
+
+    .image-wrapper img {
+      display: block;
+      max-width: 400px; /* ajusta como precisares */
+      height: auto;
+    }
+
+    .image-wrapper h1 {
+      position: absolute;
+      top: 6%;       /* centraliza verticalmente */
+      left: 50%;      /* centraliza horizontalmente */
+      transform: translate(-50%, -50%); /* ajusta para ficar bem centrado */
+      color: black;   /* cor do texto */
+      font-size: 4rem;
+      font-weight: normal;
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.7); /* sombra para contraste */
+    }
   </style>
 </head>
 <body>
@@ -130,8 +153,11 @@
   </div>
 
   <div class="wrapper">
-    <!-- Imagem lado esquerdo -->
-    <img src="https://logodownload.org/wp-content/uploads/2021/03/oppo-logo-0.png" alt="Oppo Logo">
+    <div class="image-wrapper">
+      <h1>Campanha de ofertas</h1>
+      <img src="https://logodownload.org/wp-content/uploads/2021/03/oppo-logo-0.png" alt="Oppo Logo">
+    </div>
+    <img src="https://www.oppo.com/content/dam/oppo/product-asset-library/find/find-x8-series/en/oppo-find-x8-pro/white-apac/assets/images-kv-bg-k.png" alt="Oppo Logo">
     <!-- Form lado direito -->
     <div class="container">
       <h2>Campanha de ofertas OPPO</h2>
