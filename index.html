@@ -1,7 +1,8 @@
+
 <!DOCTYPE html>
 <html lang="pt">
-  <head>
-    <!-- intl-tel-input CSS -->
+<head>
+  <!-- intl-tel-input CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
   <meta charset="UTF-8">
   <title>Campanha OPPO</title>
@@ -69,8 +70,8 @@
     }
 
     input[type="file"] {
-        border: none;
-        padding: 0;
+      border: none;
+      padding: 0;
     }
 
     button {
@@ -101,18 +102,15 @@
   </style>
 </head>
 <body>
-
   <div class="wrapper">
     <!-- Imagem lado esquerdo -->
     <img src="https://logodownload.org/wp-content/uploads/2021/03/oppo-logo-0.png" alt="Oppo Logo">
-
     <!-- Form lado direito -->
     <div class="container">
       <h2>Campanha de ofertas OPPO</h2>
       <form id="oppoForm">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
-
         <label for="email_local">Email:</label>
         <div style="display: flex; gap: 8px; align-items: center; position:relative;">
           <input type="text" id="email_local" name="email_local" required style="flex:2;" placeholder="utilizador">
@@ -141,13 +139,10 @@
             </ul>
           </div>
         </div>
-
-  <label for="telefone" style="padding-bottom:6px;display:block;">Telefone:</label>
-  <input type="tel" id="telefone" name="telefone" required style="padding-left:50px;width:100%;box-sizing:border-box;">
-
+        <label for="telefone" style="padding-bottom:6px;display:block;">Telefone:</label>
+        <input type="tel" id="telefone" name="telefone" required style="padding-left:50px;width:100%;box-sizing:border-box;">
         <label for="rua">Rua:</label>
         <input type="text" id="rua" name="rua" required>
-
         <div style="display:flex; gap:8px;">
           <div style="flex:1; min-width:90px;">
             <label for="porta">Nº da porta:</label>
@@ -162,7 +157,6 @@
             <input type="text" id="codigo_postal" name="codigo_postal" required maxlength="8" pattern="\d{4}-\d{3}" placeholder="0000-000" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9\-]/g,'')">
           </div>
         </div>
-
         <div style="display:flex; gap:8px;">
           <div style="flex:1; min-width:90px;">
             <label for="localidade">Localidade:</label>
@@ -170,35 +164,29 @@
           </div>
           <div style="flex:1; min-width:90px;">
             <label for="pais" style="padding-bottom:6px;display:block;">País:</label>
-              <input type="text" id="pais" name="pais" required>            
+            <input type="text" id="pais" name="pais" required>
           </div>
         </div>
-
-  <label for="loja">Loja onde comprou:</label>
-  <select id="loja" name="loja" required></select>
-
-
-  <label for="fatura">Nº/Referência da Fatura:</label>
-  <input type="text" id="fatura" name="fatura" required>
-
-  <label for="data_compra">Data da Compra:</label>
-  <input type="date" id="data_compra" name="data_compra" required>
-
-  <label for="file">Upload da Fatura:</label>
-  <input type="file" id="file" name="file" accept=".jpg,.png,.pdf">
-  <br><br>
-        <div >
-          <input type="checkbox" id="aceito_rgpd" name="aceito_rgpd" required>
-          <label for="aceito_rgpd" style="font-size:15px;">
+        <label for="loja">Loja onde comprou:</label>
+        <select id="loja" name="loja" required></select>
+        <label for="fatura">Nº/Referência da Fatura:</label>
+        <input type="text" id="fatura" name="fatura" required>
+        <label for="data_compra">Data da Compra:</label>
+        <input type="date" id="data_compra" name="data_compra" required>
+        <label for="file">Upload da Fatura:</label>
+        <input type="file" id="file" name="file" accept=".jpg,.png,.pdf">
+        <br><br>
+        <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 12px; justify-content: flex-start;">
+          <input type="checkbox" id="aceito_rgpd" name="aceito_rgpd" required style="margin:0;">
+          <label for="aceito_rgpd" style="font-size:15px; margin:0;">
             Li e aceito os <a href="https://www.cnpd.pt/cidadaos/rgpd/" target="_blank" style="color:#00a884;text-decoration:underline;">termos e condições RGPD</a>
           </label>
         </div>
         <button type="submit">Submeter</button>
       </form>
-  <p class="success" id="successMsg" style="display:none;"></p>
+      <p class="success" id="successMsg" style="display:none;"></p>
     </div>
   </div>
-
   <!-- intl-tel-input JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
   <!-- jQuery (necessário para country-select-js) -->
@@ -228,7 +216,6 @@
           select.appendChild(option);
         });
       });
-
     // Inicializar country-select-js para o campo país
     $(function() {
       $('#pais').countrySelect({
@@ -236,7 +223,6 @@
         preferredCountries: ['pt', 'es', 'fr', 'gb', 'de', 'br']
       });
     });
-
     // Email suggestions dropdown logic
     const emailDomainInput = document.getElementById("email_domain");
     const emailSuggestions = document.getElementById("email_suggestions");
@@ -265,35 +251,33 @@
         emailSuggestions.style.display = "none";
       });
     });
-
     document.getElementById("oppoForm").addEventListener("submit", function(event) {
       event.preventDefault();
       const formData = new FormData(this);
-  // Substituir o valor do telefone pelo formato internacional
-  formData.set("telefone", iti.getNumber());
-  // Email: juntar local e domínio
-  const emailLocal = document.getElementById("email_local").value.trim();
-  formData.set("email", emailLocal + "@" + emailDomainInput.value.trim());
-  formData.delete("email_local");
-  formData.delete("email_domain");
-  // Morada: juntar todos os campos num só string
-  const rua = document.getElementById("rua").value.trim();
-  const porta = document.getElementById("porta").value.trim();
-  const andar = document.getElementById("andar").value.trim();
-  const codigo_postal = document.getElementById("codigo_postal").value.trim();
-  const localidade = document.getElementById("localidade").value.trim();
-  const pais = document.getElementById("pais").value.trim();
-  let morada = `${rua}, Nº ${porta}`;
-  if (andar) morada += `, Andar ${andar}`;
-  morada += `, ${codigo_postal} ${localidade}, ${pais}`;
-  formData.set("morada", morada);
-  formData.delete("rua");
-  formData.delete("porta");
-  formData.delete("andar");
-  formData.delete("codigo_postal");
-  formData.delete("localidade");
-  formData.delete("pais");
-
+      // Substituir o valor do telefone pelo formato internacional
+      formData.set("telefone", iti.getNumber());
+      // Email: juntar local e domínio
+      const emailLocal = document.getElementById("email_local").value.trim();
+      formData.set("email", emailLocal + "@" + emailDomainInput.value.trim());
+      formData.delete("email_local");
+      formData.delete("email_domain");
+      // Morada: juntar todos os campos num só string
+      const rua = document.getElementById("rua").value.trim();
+      const porta = document.getElementById("porta").value.trim();
+      const andar = document.getElementById("andar").value.trim();
+      const codigo_postal = document.getElementById("codigo_postal").value.trim();
+      const localidade = document.getElementById("localidade").value.trim();
+      const pais = document.getElementById("pais").value.trim();
+      let morada = `${rua}, Nº ${porta}`;
+      if (andar) morada += `, Andar ${andar}`;
+      morada += `, ${codigo_postal} ${localidade}, ${pais}`;
+      formData.set("morada", morada);
+      formData.delete("rua");
+      formData.delete("porta");
+      formData.delete("andar");
+      formData.delete("codigo_postal");
+      formData.delete("localidade");
+      formData.delete("pais");
       fetch('http://localhost:8000/api/externos/campanhaoppo', {
         method: 'POST',
         body: formData
@@ -320,6 +304,5 @@
       });
     });
   </script>
-
 </body>
 </html>
