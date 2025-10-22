@@ -11,15 +11,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
+
     body {
-      font-family: 'Montserrat', sans-serif;
-      background: #f4f4f9;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
+  font-family: 'Montserrat', sans-serif;
+  background: #f4f4f9;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* deixa o conteúdo começar no topo */
+  min-height: 50vh;       /* altura mínima, mas permite crescer */
+  margin: 0px 0 0 0; /* remove margem superior */
+  
+  overflow-y: auto;         /* permite scroll vertical */
+}
+
 
     /* Wrapper para dividir imagem e formulário */
     .wrapper {
@@ -49,6 +53,14 @@
     h2 {
       text-align: center;
       margin-bottom: 25px;
+      color: #2b2d42;
+      font-weight: 300; /* light */
+    }
+
+    h3 {
+      text-align: center;
+      margin-bottom: 0px;
+      margin-top: -25px;
       color: #2b2d42;
       font-weight: 300; /* light */
     }
@@ -141,6 +153,30 @@
       font-family: 'Montserrat', sans-serif;
       text-shadow: 2px 2px 5px rgba(0,0,0,0.7); /* sombra para contraste */
     }
+
+    #imeiContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* duas colunas */
+  gap: 12px 16px; /* espaçamento vertical e horizontal */
+  margin-top: 8px;
+}
+
+.imei-field {
+  display: flex;
+  flex-direction: column;
+}
+
+
+#imeiContainer label {
+  margin-top: 10px;
+  font-weight: 500;
+  color: #444;
+}
+
+#imeiContainer input {
+  width: 100%;
+}
+
   </style>
 </head>
 <body>
@@ -161,6 +197,7 @@
     <!-- Form lado direito -->
     <div class="container">
       <h2>Campanha de ofertas OPPO</h2>
+      <h3>para compras Oppo Find X9 PRO</h3>
       <form id="oppoForm">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required>
@@ -192,9 +229,9 @@
             </ul>
           </div>
         </div>
-        <label for="telefone" style="padding-bottom:6px;display:block;">Telefone:</label>
+        <label for="telefone" style="padding-bottom:6px;display:block;">Telemóvel do destinatário da oferta:</label>
         <input type="tel" id="telefone" name="telefone" required style="padding-left:50px;width:100%;box-sizing:border-box;">
-        <label for="rua">Rua:</label>
+        <label for="rua">Rua para entrega da oferta:</label>
         <input type="text" id="rua" name="rua" required>
         <div style="display:flex; gap:8px;">
           <div style="flex:1; min-width:90px;">
@@ -222,10 +259,29 @@
         </div>
         <label for="loja">Loja onde comprou:</label>
         <select id="loja" name="loja" required></select>
+        <div style="display:flex; gap:8px;">
+        <div style="flex:1; min-width:90px;">
         <label for="fatura">Nº/Referência da Fatura:</label>
         <input type="text" id="fatura" name="fatura" required>
-  <label for="data_compra">Data e Hora da Fatura:</label>
+        </div>
+        <div style="flex:1; min-width:90px;">
+        <label for="unidades">Nº de unidades compradas:</label>
+        <input
+            type="number"
+            id="unidades"
+            name="unidades"
+            min="1"
+            max="10"
+            step="1"
+            value="1"
+            required
+        >
+        </div>
+        </div>
+        <label for="data_compra">Data e Hora da Fatura/Compra:</label>
   <input type="datetime-local" id="data_compra" name="data_compra" required>
+        <div id="imeiContainer"></div>
+  
         <label for="file">Upload da Fatura:</label>
   <input type="file" id="file" name="file" accept=".jpg,.png,.pdf" required>
         <br><br>
@@ -235,7 +291,7 @@
           </div>
           <div style="flex:1; min-width:150px; margin-top:-12px;">
             <label for="aceito_rgpd" class="rgpd-label">
-              Li e aceito os <a href="https://www.cnpd.pt/cidadaos/rgpd/" target="_blank" style="color:#00a884;text-decoration:underline;">termos e condições RGPD</a>
+              Li e aceito os <a href="https://www.cnpd.pt/cidadaos/rgpd/" target="_blank" style="color:#00a884;text-decoration:underline;">termos e condições RGPD.</a>
             </label>
           </div>
         </div>
@@ -252,13 +308,87 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/country-select-js@2.0.1/build/css/countrySelect.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/country-select-js@2.0.1/build/js/countrySelect.min.js"></script>
   <script>
+  const dataLimiteCampanha = new Date("2025-11-02T23:59:00");
     // Inicializar intl-tel-input
     const telInput = document.querySelector("#telefone");
     const iti = window.intlTelInput(telInput, {
       initialCountry: "pt",
       separateDialCode: true,
-      preferredCountries: ["pt", "es", "fr", "gb"],
+      onlyCountries: ["pt"],
       utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+    });
+
+    // --- Gerar campos IMEI dinamicamente ---
+    const unidadesInput = document.getElementById("unidades");
+    const imeiContainer = document.getElementById("imeiContainer");
+    imeiContainer.style.display = "none";
+
+    const dataCompraInput = document.getElementById("data_compra");
+
+// 🔹 Função que atualiza visibilidade e obrigatoriedade dos campos IMEI
+function atualizarCamposIMEI() {
+  const dataCompraValor = dataCompraInput.value;
+  if (!dataCompraValor) {
+    imeiContainer.style.display = "none";
+    return;
+  }
+
+  const dataCompra = new Date(dataCompraValor);
+  const unidades = parseInt(unidadesInput.value) || 1;
+
+  // Se a data for superior ao limite, mostra e torna obrigatório
+  if (dataCompra > dataLimiteCampanha) {
+    gerarCamposIMEI(unidades);
+    imeiContainer.style.display = "grid";
+    document.querySelectorAll("#imeiContainer input").forEach(input => {
+      input.required = true;
+    });
+  } else {
+    imeiContainer.innerHTML = ""; // remove campos se já existirem
+    imeiContainer.style.display = "none";
+  }
+}
+
+// 🔹 Eventos que disparam a atualização
+dataCompraInput.addEventListener("change", atualizarCamposIMEI);
+unidadesInput.addEventListener("input", atualizarCamposIMEI);
+
+
+    function gerarCamposIMEI(qtd) {
+  imeiContainer.innerHTML = ""; // limpa campos antigos
+  for (let i = 1; i <= qtd; i++) {
+    const div = document.createElement("div");
+    div.className = "imei-field";
+
+    const label = document.createElement("label");
+    label.htmlFor = `imei${i}`;
+    label.textContent = `IMEI1 do ${i}º Find X9 PRO:`;
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.id = `imei${i}`;
+    input.name = `imei${i}`;
+    input.maxLength = 20;
+    input.pattern = "[0-9]+";
+    input.placeholder = `Introduza o IMEI1`;
+    input.required = false; // ⚠️ por defeito, não obrigatório
+    input.addEventListener("input", function () {
+      this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    div.appendChild(label);
+    div.appendChild(input);
+    imeiContainer.appendChild(div);
+  }
+}
+
+    // Gera automaticamente 1 IMEI no início
+    gerarCamposIMEI(parseInt(unidadesInput.value) || 1);
+
+    // Atualiza quando muda o número de unidades
+    unidadesInput.addEventListener("input", function() {
+      const qtd = parseInt(this.value) || 1;
+      gerarCamposIMEI(qtd);
     });
 
     // Impedir letras no campo telefone
@@ -297,7 +427,7 @@
       this.value = this.value.replace(/[^A-Za-zÀ-ÿ0-9\s]/g, '');
     });
     // Carregar lojas do endpoint
-    fetch('https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/lojas')
+    fetch('http://localhost:8000/api/externos/campanhaoppo/lojas')
       .then(res => res.json())
       .then(data => {
         const select = document.getElementById('loja');
@@ -313,7 +443,7 @@
     $(function() {
       $('#pais').countrySelect({
         defaultCountry: 'pt',
-        preferredCountries: ['pt', 'es', 'fr', 'gb', 'de', 'br']
+        onlyCountries: ['pt']
       });
     });
     // Email suggestions dropdown logic
@@ -358,6 +488,15 @@
       let morada = `${rua}, Nº ${porta}`;
       if (andar) morada += `, Andar ${andar}`;
       morada += `, ${codigo_postal} ${localidade}, ${pais}`;
+      // Recolher IMEIs
+      let imeis = '';
+      for (let i = 1; i <= parseInt(document.getElementById("unidades").value || "1"); i++) {
+        const imeiInput = document.getElementById(`imei${i}`);
+        if (imeiInput && imeiInput.value.trim()) {
+          imeis += (imeis ? ',' : '') + imeiInput.value.trim();
+        }
+      }
+
       const data = {
         nome: document.getElementById("nome").value.trim(),
         email: emailLocal + "@" + emailDomainInput.value.trim(),
@@ -365,7 +504,9 @@
         loja: document.getElementById("loja").value,
         morada: morada,
         fatura: document.getElementById("fatura").value.trim(),
-        data_compra: document.getElementById("data_compra").value
+        data_compra: document.getElementById("data_compra").value,
+        unidades: document.getElementById("unidades").value.trim(),
+        imeis: imeis // 👈 novo campo array
       };
       // Preparar formData para ficheiro
       const fileInput = document.getElementById("file");
@@ -374,7 +515,7 @@
       if (fileInput.files.length > 0) {
         formData.append("file", fileInput.files[0]);
       }
-      fetch('https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo', {
+      fetch('http://localhost:8000/api/externos/campanhaoppo', {
         method: 'POST',
         body: formData
       })
