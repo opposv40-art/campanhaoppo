@@ -587,24 +587,6 @@
               .then(async res => {
                   if (res.status === 200) {
                       window.location.href = 'concluido.html'; // página de conclusão
-                      try {
-                        await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({
-                            service_id: "service_5yjq4gr",
-                            template_id: "template_9utxswf",
-                            user_id: "l6aSZbA4Hliu-0Ljj",
-                            template_params: {
-                              nome: s.nome,
-                              loja: s.loja,
-                              data_compra: s.dataCompra,
-                              email: s.email,
-                              telefone: s.telefone,
-                              unidades: s.unidades
-                            }
-                          })
-                        });
                       return;
                   } else {
                       if (res.status === 400) {
