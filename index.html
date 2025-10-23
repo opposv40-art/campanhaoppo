@@ -490,7 +490,7 @@
           this.value = this.value.replace(/[^A-Za-zÀ-ÿ0-9\s]/g, '');
       });
       // Carregar lojas do endpoint
-      fetch('http://https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/lojas')
+      fetch('https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/lojas')
           .then(res => res.json())
           .then(data => {
               const select = document.getElementById('loja');
@@ -580,7 +580,7 @@
           if (fileInput.files.length > 0) {
               formData.append("file", fileInput.files[0]);
           }
-          fetch('http://https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo', {
+          fetch('https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo', {
                   method: 'POST',
                   body: formData
               })
