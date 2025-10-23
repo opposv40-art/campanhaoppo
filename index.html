@@ -12,28 +12,91 @@
 
   <style>
 
-   body {
-   font-family: 'Montserrat', sans-serif;
-   background: #f4f4f9;
-   display: flex;
-   justify-content: center;
-   align-items: flex-start; /* deixa o conteúdo começar no topo */
-   min-height: 50vh;       /* altura mínima, mas permite crescer */
-   margin: 0px 0 0 0; /* remove margem superior */
-   overflow-y: auto;         /* permite scroll vertical */
-   }
+  
 
-   /* Wrapper para dividir imagem e formulário */
-   .wrapper {
-   position: relative;
-   width: 100%;
-   min-height: 110vh;
-   background: url('./oppo_Find X9 Pro_Web Campanhas_16-9.jpg') no-repeat center center;
-   background-size: cover;
-   display: flex;
-   justify-content: flex-end; /* empurra o form para a direita */
-   align-items: center;
-   }
+   body {
+    font-family: 'Montserrat', sans-serif;
+    background: #ffffffff;
+    display: flex;
+    justify-content: flex-start; /* começa à esquerda */
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 30px;
+    overflow-x: auto; /* 👈 permite scroll horizontal */
+    overflow-y: auto;
+  }
+
+  /* --- Layout base (desktop) --- */
+.wrapper {
+  display: flex;
+  flex-direction: row; /* imagem e form lado a lado */
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 1900px; /* para desktop largo */
+  min-height: 50vh;
+  background: url('./oppo_Find X9 Pro_Web Campanhas_16-9.jpg') no-repeat center left;
+  background-size: cover;
+}
+
+/* --- Layout responsivo para mobile --- */
+@media (max-width: 1024px) {
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-x: auto; /* ❌ não queremos scroll lateral */
+    overflow-y: auto;   /* ✅ scroll vertical permitido */
+    width: 100%;
+  }
+
+  .wrapper {
+    flex-direction: column; /* imagem em cima, form em baixo */
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    min-width: 100%;
+    background: none; /* removemos o fundo grande do desktop */
+  }
+
+  /* Imagem no topo — ocupa sempre 100% da largura do ecrã */
+  .wrapper::before {
+  content: "";
+  display: block;
+  min-width: 100%;
+  height: auto;
+  background: url('./oppo_Find X9 Pro_Web Campanhas_16-9 copy.jpg') no-repeat center center;
+  background-size: contain; /* mostra sempre a imagem inteira */
+  background-color: #fff; /* opcional: fundo branco por baixo da imagem */
+  aspect-ratio: 16 / 9; /* mantém proporção */
+}
+
+  .container {
+    width: 100%;
+    max-width: none; /* ocupa toda a largura */
+    margin-left: 50px;
+    padding: 24px 20px;
+    box-shadow: none;
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  h2, h3 {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  label, input, select, button {
+    font-size: 1rem;
+  }
+
+  button {
+    padding: 14px;
+  }
+}
+
 
    .wrapper img {
    max-width: 400px;
@@ -47,7 +110,7 @@
    box-shadow: 0px 6px 18px rgba(0,0,0,0.15);
    width: 480px;
    max-width: 90%;
-   margin-right: clamp(80px, 6.5vw, 200px); /* ajusta para alinhar com o espaço branco da imagem */
+   margin-right: clamp(80px, 6.5vw, 50px); /* ajusta para alinhar com o espaço branco da imagem */
    transform: scale(0.95);
    }
 
@@ -425,7 +488,7 @@
           this.value = this.value.replace(/[^A-Za-zÀ-ÿ0-9\s]/g, '');
       });
       // Carregar lojas do endpoint
-      fetch('https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/lojas')
+      fetch('http://https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/lojas')
           .then(res => res.json())
           .then(data => {
               const select = document.getElementById('loja');
@@ -515,7 +578,7 @@
           if (fileInput.files.length > 0) {
               formData.append("file", fileInput.files[0]);
           }
-          fetch('https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo', {
+          fetch('http://https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo', {
                   method: 'POST',
                   body: formData
               })
