@@ -586,9 +586,37 @@
               })
               .then(async res => {
                   if (res.status === 200) {
-                      window.location.href = 'concluido.html'; // página de conclusão
-                      return;
-                  } else {
+                    // ✅ Enviar email via EmailJS
+                    try {
+                        await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                service_id: "service_5yjq4gr",         // mesmo do backoffice
+                                template_id: "template_p1md6xg",       // novo template
+                                user_id: "l6aSZbA4Hliu-0Ljj",          // mesmo do backoffice
+                                template_params: {
+                                    nome: data.nome,
+                                    loja: data.loja,
+                                    data_compra: data.data_compra,
+                                    email: data.email,
+                                    telefone: data.telefone,
+                                    unidades: data.unidades,
+                                    imeis: data.imeis || "",
+                                    fatura: data.fatura,
+                                    morada: data.morada
+                                }
+                            })
+                        });
+                        console.log("Email enviado com sucesso!");
+                    } catch (err) {
+                        console.error("Erro ao enviar email via EmailJS:", err);
+                    }
+
+                    // Redirecionar após enviar email
+                    window.location.href = 'concluido.html';
+                    return;
+                } else {
                       if (res.status === 400) {
                           const errorData = await res.json();
                           const modal = document.getElementById("errorModal");
