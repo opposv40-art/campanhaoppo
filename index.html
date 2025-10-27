@@ -617,7 +617,7 @@
                     }
 
                     // Redirecionar após enviar email
-                    window.location.href = 'concluido.html';
+                    //window.location.href = 'concluido.html';
                     return;
                 } else {
                       if (res.status === 400) {
@@ -633,24 +633,26 @@
                           return;
                       }
                   }
-                  const data = await res.json();
-                  const msg = document.getElementById("successMsg");
-                  if (data.status === 'ok') {
-                      msg.textContent = "Formulário enviado com sucesso!";
-                      msg.style.color = "green";
-                      msg.style.display = "block";
-                      document.getElementById("oppoForm").reset();
-                  } else {
-                      msg.textContent = "Erro: " + JSON.stringify(data.errors);
-                      msg.style.color = "red";
-                      msg.style.display = "block";
-                  }
-              })
-              .catch(() => {
-                  const msg = document.getElementById("successMsg");
-                  msg.textContent = "Erro ao submeter. Tente novamente.";
+              // ⚠️ Renomeado para evitar conflito com "data" do formulário
+                const resposta = await res.json();
+                const msg = document.getElementById("successMsg");
+              
+                if (resposta.status === 'ok') {
+                  msg.textContent = "Formulário enviado com sucesso!";
+                  msg.style.color = "green";
+                  msg.style.display = "block";
+                  document.getElementById("oppoForm").reset();
+                } else {
+                  msg.textContent = "Erro: " + JSON.stringify(resposta.errors);
                   msg.style.color = "red";
                   msg.style.display = "block";
+                }
+              })
+              .catch(() => {
+                const msg = document.getElementById("successMsg");
+                msg.textContent = "Erro ao submeter. Tente novamente.";
+                msg.style.color = "red";
+                msg.style.display = "block";
               });
       });
     </script>
