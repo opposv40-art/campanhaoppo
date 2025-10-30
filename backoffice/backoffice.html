@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabela de Submissões - Campanha Oppo</title>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-image: url('https://www.oppo.com/content/dam/oppo_com/pt/mkt/events/reno14bannerkv/v3_5120x1820px.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .top-banner {
+      background: linear-gradient(180deg, #cfe8f7 0%, #f3f5f7 100%);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 50px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .top-banner img {
+      height: 22px;
+    }
+
+    .logout-btn {
+      background-color: #198896ff;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: normal;
+      transition: background-color 0.25s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .logout-btn:hover {
+      background-color: #a7a7a7ff;
+    }
+
+    .content {
+      padding: 40px 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #000000ff;
+      margin-bottom: 25px;
+    }
+
+    /* 🔹 Filtros */
+    .filters {
+      background: rgba(255,255,255,0.9);
+      border-radius: 10px;
+      padding: 15px 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-group label {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .filter-group input, .filter-group select {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-family: inherit;
+    }
+
+    .filter-buttons {
+      margin-left: auto;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      background-color: #198896ff;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.25s ease;
+    }
+
+    button:hover {
+      background-color: #a7a7a7ff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    thead {
+      background-color: #696969ff;
+      color: white;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e3e7eb;
+    }
+
+    tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+    .email-status {
+      font-weight: normal;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .enviado {
+      color: #0a8f1f;
+    }
+
+    .nao-enviado {
+      color: #c62828;
+    }
+
+    .actions {
+      margin-top: 20px;
+      text-align: right;
+    }
+
+    /* 🔹 Modal de edição de observações */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 200;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal-content textarea {
+  width: 95%;
+  height: 100px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 8px;
+  resize: none;
+  font-family: inherit;
+}
+
+.modal-buttons {
+  text-align: left;
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* 🔹 Botão de editar observações */
+.edit-btn {
+  background-color: transparent;
+  color: #198896ff;            /* Verde Oppo */
+  border: 1px solid #198896ff; /* Só a borda verde */
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 6px;
+}
+
+.edit-btn:hover {
+  background-color: #198896ff;
+  color: white;
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="top-banner">
+    <img src="https://logodownload.org/wp-content/uploads/2021/03/oppo-logo.png" alt="OPPO Logo">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="content">
+    <h1>Submissões - Campanha Oppo</h1>
+
+    <!-- 🔹 Filtros -->
+    <div class="filters">
+      <div class="filter-group">
+        <label>Nome:</label>
+        <input type="text" id="filterNome" placeholder="Filtrar por nome">
+      </div>
+      <div class="filter-group">
+        <label>Fatura:</label>
+        <input type="text" id="filterFatura" placeholder="Filtrar por fatura">
+      </div>
+      <div class="filter-group">
+        <label>Email Vencedor:</label>
+        <select id="filterEmailStatus">
+          <option value="">Todos</option>
+          <option value="enviado">Email enviado</option>
+          <option value="nao-enviado">Email não enviado</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Data Compra início:</label>
+        <input type="date" id="filterDataInicio">
+      </div>
+      <div class="filter-group">
+        <label>Data Compra fim:</label>
+        <input type="date" id="filterDataFim">
+      </div>
+
+      <div class="filter-buttons">
+        <button onclick="filtrarSubmissoes()">Filtrar</button>
+        <button onclick="limparFiltros()">Limpar</button>
+      </div>
+    </div>
+
+    <table id="tabelaSubmissoes">
+      <thead>
+        <tr>
+          <th>Selecionar</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Telefone</th>
+          <th>Data Compra</th>
+          <th>Fatura</th>
+          <th>Loja</th>
+          <!--<th>Morada</th>-->
+          <th>Data Submissão</th>
+          <th>Unidades</th>
+          <th>IMEIs</th>
+          <th>Anexos</th>
+          <th>Observações</th>
+          <th>Email Vencedor</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="actions">
+      <button onclick="enviarEmail()">Enviar Email aos Vencedores</button>
+    </div>
+  </div>
+
+  <script>
+function logout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("refresh_token");
+  window.location.href = "./login.html";
+}
+
+// 🔹 Função fetch com refresh automático
+async function fetchComAuth(url, options = {}) {
+  let token = localStorage.getItem("token");
+  const refreshToken = localStorage.getItem("refresh_token");
+
+  const headers = {
+    ...(options.headers || {}),
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+
+  let response = await fetch(url, { ...options, headers });
+
+  if (response.status === 401 && refreshToken) {
+    const refreshResponse = await fetch("http://localhost:8000/api/externos/refresh-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+
+    if (refreshResponse.ok) {
+      const data = await refreshResponse.json();
+      if (data.success && data.access_token) {
+        localStorage.setItem("token", data.access_token);
+        token = data.access_token;
+        const retryHeaders = {
+          ...(options.headers || {}),
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+        response = await fetch(url, { ...options, headers: retryHeaders });
+      } else {
+        logout();
+      }
+    } else {
+      logout();
+    }
+  }
+
+  return response;
+}
+
+let submissõesGlobais = [];
+
+// 🔹 Carregar submissões
+async function carregarSubmissoes() {
+  try {
+    const response = await fetchComAuth("http://localhost:8000/api/externos/campanhaoppo/list");
+    if (!response.ok) throw new Error("Erro ao obter submissões");
+
+    const data = await response.json();
+    submissõesGlobais = data.submissoes;
+    renderTabela(submissõesGlobais);
+  } catch (err) {
+    console.error("Erro ao carregar submissões:", err);
+    alert("Erro ao carregar submissões da API!");
+  }
+}
+
+// 🔹 Renderizar tabela
+function renderTabela(lista) {
+  const tbody = document.querySelector("#tabelaSubmissoes tbody");
+  tbody.innerHTML = "";
+
+  lista.forEach(sub => {
+    const row = document.createElement("tr");
+    row.dataset.id = sub.id;
+
+    const anexosHTML = sub.anexos && sub.anexos.length > 0
+      ? sub.anexos.map(a => `<a href="${a.arquivo_url}" target="_blank">Anexo ${a.id}</a>`).join(", ")
+      : "—";
+
+    const statusClasse = sub.vencedor ? "enviado" : "nao-enviado";
+    const statusTexto = sub.vencedor ? "Email enviado" : "Email não enviado";
+
+    row.innerHTML = `
+      <td><input type="checkbox" class="vencedor"></td>
+      <td>${sub.nome || ""}</td>
+      <td>${sub.email || ""}</td>
+      <td>${sub.telefone || ""}</td>
+      <td>${new Date(sub.data_compra).toLocaleString("pt-PT")}</td>
+      <td>${sub.fatura || ""}</td>
+      <td>${sub.loja || ""}</td>
+      <!--<td>${sub.morada || ""}</td>-->
+      <td>${new Date(sub.data_submissao).toLocaleString("pt-PT")}</td>
+      <td>${sub.unidades || ""}</td>
+      <td>${sub.imeis || ""}</td>
+      <td>${anexosHTML}</td>
+      <td>
+  
+  <button class="edit-btn" title="Editar observação"
+  onclick="abrirModal(${sub.id}, '${sub.notas_admin ? sub.notas_admin.replace(/'/g, "\\'").replace(/"/g, '&quot;') : ''}')">
+  ✏️
+</button>
+<span class="nota-texto">${sub.notas_admin || ""}</span>
+</td>
+      <td><span class="email-status ${statusClasse}">${statusTexto}</span></td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+// 🔹 Filtro de submissões
+function filtrarSubmissoes() {
+  const nome = document.getElementById("filterNome").value.toLowerCase();
+  const fatura = document.getElementById("filterFatura").value.toLowerCase();
+  const emailStatus = document.getElementById("filterEmailStatus").value;
+  const dataInicio = document.getElementById("filterDataInicio").value;
+  const dataFim = document.getElementById("filterDataFim").value;
+
+  const filtradas = submissõesGlobais.filter(sub => {
+    const dataSub = new Date(sub.data_compra);
+    const dentroRange =
+      (!dataInicio || dataSub >= new Date(dataInicio)) &&
+      (!dataFim || dataSub <= new Date(dataFim + "T23:59:59"));
+
+    const statusOK =
+      !emailStatus ||
+      (emailStatus === "enviado" && sub.vencedor) ||
+      (emailStatus === "nao-enviado" && !sub.vencedor);
+
+    return (
+      dentroRange &&
+      statusOK &&
+      (!nome || sub.nome?.toLowerCase().includes(nome)) &&
+      (!fatura || sub.fatura?.toLowerCase().includes(fatura))
+    );
+  });
+
+  renderTabela(filtradas);
+}
+
+// 🔹 Limpar filtros
+function limparFiltros() {
+  document.getElementById("filterNome").value = "";
+  document.getElementById("filterFatura").value = "";
+  document.getElementById("filterEmailStatus").value = "";
+  document.getElementById("filterDataInicio").value = "";
+  document.getElementById("filterDataFim").value = "";
+  renderTabela(submissõesGlobais);
+}
+
+// 🔹 Enviar email aos vencedores (mantém igual ao teu original)
+async function enviarEmail() {
+  const linhas = document.querySelectorAll('#tabelaSubmissoes tbody tr');
+  const selecionados = [];
+
+  linhas.forEach(linha => {
+    const checkbox = linha.querySelector('.vencedor');
+    const status = linha.querySelector('.email-status');
+    if (checkbox.checked) {
+      const id = linha.dataset.id;
+      selecionados.push({
+        id,
+        nome: linha.cells[1].textContent,
+        email: linha.cells[2].textContent,
+        loja: linha.cells[4].textContent,
+        dataCompra: linha.cells[8].textContent,
+        telefone: linha.cells[3].textContent,
+        unidades: linha.cells[9].textContent,
+        status
+      });
+    }
+  });
+
+  if (selecionados.length === 0) {
+    alert('Nenhum vencedor selecionado!');
+    return;
+  }
+
+  try {
+    const ids = selecionados.map(s => s.id);
+    const response = await fetchComAuth("http://localhost:8000/api/externos/campanhaoppo/winners", {
+      method: "POST",
+      body: JSON.stringify({ ids }),
+    });
+
+    if (!response.ok) throw new Error("Erro ao registar vencedores");
+  } catch (err) {
+    alert("Erro ao registar vencedores!");
+    return;
+  }
+
+  for (const s of selecionados) {
+    try {
+      await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service_id: "service_5yjq4gr",
+          template_id: "template_9utxswf",
+          user_id: "l6aSZbA4Hliu-0Ljj",
+          template_params: {
+            nome: s.nome,
+            loja: s.loja,
+            data_compra: s.dataCompra,
+            email: s.email,
+            telefone: s.telefone,
+            unidades: s.unidades
+          }
+        })
+      });
+
+      s.status.textContent = 'Enviado';
+      s.status.classList.remove('nao-enviado');
+      s.status.classList.add('enviado');
+
+    } catch (err) {
+      console.error('Erro ao enviar email:', err);
+    }
+  }
+
+  alert('Emails enviados com sucesso!');
+}
+
+// 🔹 Variáveis de estado do modal
+let submissaoAtualId = null;
+
+// 🔹 Abre o modal de edição
+function abrirModal(id, textoAtual) {
+  submissaoAtualId = id;
+  const modal = document.getElementById("modalObservacao");
+  const textarea = document.getElementById("observacaoTexto");
+  textarea.value = textoAtual || "";
+  modal.style.display = "flex";
+}
+
+// 🔹 Fecha o modal
+function fecharModal() {
+  document.getElementById("modalObservacao").style.display = "none";
+  submissaoAtualId = null;
+}
+
+// 🔹 Guardar observação (POST para o Django)
+async function guardarObservacao() {
+  const texto = document.getElementById("observacaoTexto").value;
+
+  if (!submissaoAtualId) return;
+
+  try {
+    const response = await fetchComAuth("http://localhost:8000/api/externos/campanhaoppo/admin-notes", {
+      method: "POST",
+      body: JSON.stringify({
+        submission_id: submissaoAtualId,
+        notas_admin: texto
+      })
+    });
+
+    if (!response.ok) throw new Error("Erro ao guardar observação");
+
+    // Atualiza a tabela localmente
+    const sub = submissõesGlobais.find(s => s.id == submissaoAtualId);
+    if (sub) sub.notas_admin = texto;
+
+    fecharModal();
+    renderTabela(submissõesGlobais);
+  } catch (err) {
+    console.error(err);
+    alert("Erro ao guardar observação!");
+  }
+}
+
+// 🔹 Fecha o modal se o utilizador clicar fora
+window.onclick = function(event) {
+  const modal = document.getElementById("modalObservacao");
+  if (event.target === modal) fecharModal();
+};
+
+// 🔹 Inicialização
+window.onload = carregarSubmissoes;
+</script>
+<!-- 🔹 Modal de edição de observações -->
+<div id="modalObservacao" class="modal">
+  <div class="modal-content">
+    <h3>Editar Observação</h3>
+    <textarea id="observacaoTexto"></textarea>
+    <div class="modal-buttons">
+      <button onclick="guardarObservacao()">Guardar</button>
+      <button onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
