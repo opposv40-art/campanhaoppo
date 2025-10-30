@@ -306,7 +306,7 @@ async function fetchComAuth(url, options = {}) {
   let response = await fetch(url, { ...options, headers });
 
   if (response.status === 401 && refreshToken) {
-    const refreshResponse = await fetch("http://localhost:8000/api/externos/refresh-token", {
+    const refreshResponse = await fetch("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/refresh-token", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh_token: refreshToken }),
@@ -339,7 +339,7 @@ let submissõesGlobais = [];
 // 🔹 Carregar submissões
 async function carregarSubmissoes() {
   try {
-    const response = await fetchComAuth("http://localhost:8000/api/externos/campanhaoppo/list");
+    const response = await fetchComAuth("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/list");
     if (!response.ok) throw new Error("Erro ao obter submissões");
 
     const data = await response.json();
@@ -464,7 +464,7 @@ async function enviarEmail() {
 
   try {
     const ids = selecionados.map(s => s.id);
-    const response = await fetchComAuth("http://localhost:8000/api/externos/campanhaoppo/winners", {
+    const response = await fetchComAuth("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/winners", {
       method: "POST",
       body: JSON.stringify({ ids }),
     });
@@ -532,7 +532,7 @@ async function guardarObservacao() {
   if (!submissaoAtualId) return;
 
   try {
-    const response = await fetchComAuth("http://localhost:8000/api/externos/campanhaoppo/admin-notes", {
+    const response = await fetchComAuth("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/admin-notes", {
       method: "POST",
       body: JSON.stringify({
         submission_id: submissaoAtualId,
