@@ -389,11 +389,15 @@ function renderTabela(lista) {
       <td>${sub.nome || ""}</td>
       <td>${sub.email || ""}</td>
       <td>${sub.telefone || ""}</td>
-      <td>${new Date(sub.data_compra).toLocaleString("pt-PT")}</td>
+      <td data-date="${sub.data_compra}">
+		${new Date(sub.data_compra).toLocaleString("pt-PT")}
+      </td>
       <td>${sub.fatura || ""}</td>
       <td>${sub.loja || ""}</td>
       <!--<td>${sub.morada || ""}</td>-->
-      <td>${new Date(sub.data_submissao).toLocaleString("pt-PT")}</td>
+      <td data-date="${sub.data_submissao}">
+		${new Date(sub.data_submissao).toLocaleString("pt-PT")}
+	  </td>
       <td>${sub.unidades || ""}</td>
       <td>${sub.imeis || ""}</td>
       <td>${anexosHTML}</td>
@@ -589,8 +593,11 @@ function ordenarTabela(indiceColuna) {
     if (!isNaN(valA) && !isNaN(valB)) return asc ? valA - valB : valB - valA;
 
     // data
-    const dataA = Date.parse(valA);
-    const dataB = Date.parse(valB);
+    const rawA = a.children[indiceColuna].getAttribute("data-date");
+	const rawB = b.children[indiceColuna].getAttribute("data-date");
+
+	const dataA = rawA ? new Date(rawA).getTime() : NaN;
+	const dataB = rawB ? new Date(rawB).getTime() : NaN;
     if (!isNaN(dataA) && !isNaN(dataB))
       return asc ? dataA - dataB : dataB - dataA;
 
