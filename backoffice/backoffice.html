@@ -213,6 +213,23 @@
   color: white;
 }
 
+th.sortable {
+  cursor: pointer;
+  position: relative;
+}
+
+th.active-sort {
+  background-color: #198896ff;
+  color: white !important;
+}
+
+th.active-sort::after {
+  content: attr(data-sort-icon);
+  position: absolute;
+  right: 8px;
+  font-size: 12px;
+}
+
   </style>
 </head>
 <body>
@@ -260,27 +277,27 @@
 
     <table id="tabelaSubmissoes">
       <thead>
-        <tr>
-          <th>Selecionar</th>
-          <th>Nome</th>
-          <th>Email</th>
-          <th>Telefone</th>
-          <th>Data Compra</th>
-          <th>Fatura</th>
-          <th>Loja</th>
-          <!--<th>Morada</th>-->
-          <th>Data Submissão</th>
-          <th>Unidades</th>
-          <th>IMEIs</th>
-          <th>Anexos</th>
-          <th>Observações</th>
-          <th>Email Vencedor</th>
-        </tr>
-      </thead>
+  <tr>
+    <th class="sortable" onclick="ordenarTabela(0)">Selecionar</th>
+    <th class="sortable" onclick="ordenarTabela(1)">Nome</th>
+    <th class="sortable" onclick="ordenarTabela(2)">Email</th>
+    <th class="sortable" onclick="ordenarTabela(3)">Telefone</th>
+    <th class="sortable" onclick="ordenarTabela(4)">Data Compra</th>
+    <th class="sortable" onclick="ordenarTabela(5)">Fatura</th>
+    <th class="sortable" onclick="ordenarTabela(6)">Loja</th>
+    <th class="sortable" onclick="ordenarTabela(7)">Data Submissão</th>
+    <th class="sortable" onclick="ordenarTabela(8)">Unidades</th>
+    <th class="sortable" onclick="ordenarTabela(9)">IMEIs</th>
+    <th class="sortable" onclick="ordenarTabela(10)">Anexos</th>
+    <th class="sortable" onclick="ordenarTabela(11)">Observações</th>
+    <th class="sortable" onclick="ordenarTabela(12)">Email Vencedor</th>
+  </tr>
+</thead>
       <tbody></tbody>
     </table>
 
     <div class="actions">
+      <button onclick="exportarExcel()">Exportar Excel</button>
       <button onclick="enviarEmail()">Enviar Email aos Vencedores</button>
     </div>
   </div>
@@ -506,6 +523,90 @@ async function enviarEmail() {
 
   alert('Emails enviados com sucesso!');
 }
+
+async function exportarExcel() {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/export", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      alert("Erro ao exportar Excel!");
+      return;
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "campanha_oppo.xlsx";
+    document.body.appendChild(link);
+    link.click();
+
+    window.URL.revokeObjectURL(url);
+    link.remove();
+  } catch (err) {
+    console.error("Erro ao exportar Excel:", err);
+    alert("Erro ao exportar Excel!");
+  }
+}
+
+let ordemAtual = {};
+let ultimaColuna = null;
+
+function ordenarTabela(indiceColuna) {
+  const tabela = document.getElementById("tabelaSubmissoes");
+  const tbody = tabela.querySelector("tbody");
+  const ths = tabela.querySelectorAll("th.sortable");
+  const linhas = Array.from(tbody.querySelectorAll("tr"));
+
+  // alternância asc/desc
+  ordemAtual[indiceColuna] = ordemAtual[indiceColuna] === "asc" ? "desc" : "asc";
+  const asc = ordemAtual[indiceColuna] === "asc";
+
+  // update UI estado visual
+  ths.forEach((th, i) => {
+    th.classList.remove("active-sort");
+    th.removeAttribute("data-sort-icon");
+    if (i === indiceColuna) {
+      th.classList.add("active-sort");
+      th.setAttribute("data-sort-icon", asc ? "▲" : "▼");
+    }
+  });
+
+  // ordenar valores
+  linhas.sort((a, b) => {
+    let valA = a.children[indiceColuna].innerText.trim();
+    let valB = b.children[indiceColuna].innerText.trim();
+
+    // número
+    if (!isNaN(valA) && !isNaN(valB)) return asc ? valA - valB : valB - valA;
+
+    // data
+    const dataA = Date.parse(valA);
+    const dataB = Date.parse(valB);
+    if (!isNaN(dataA) && !isNaN(dataB))
+      return asc ? dataA - dataB : dataB - dataA;
+
+    // texto
+    return asc 
+      ? valA.localeCompare(valB, 'pt', { sensitivity: 'base' })
+      : valB.localeCompare(valA, 'pt', { sensitivity: 'base' });
+  });
+
+  // re-render
+  tbody.innerHTML = "";
+  linhas.forEach(l => tbody.appendChild(l));
+
+  ultimaColuna = indiceColuna;
+}
+
 
 // 🔹 Variáveis de estado do modal
 let submissaoAtualId = null;
