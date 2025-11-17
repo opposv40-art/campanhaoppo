@@ -269,6 +269,10 @@ th.active-sort::after {
         <input type="date" id="filterDataFim">
       </div>
 
+      <div style="margin-left: 20px; align-self: center;">
+      Número total de Submissões: <span id="numSubmissoes"></span>
+      </div>
+
       <div class="filter-buttons">
         <button onclick="filtrarSubmissoes()">Filtrar</button>
         <button onclick="limparFiltros()">Limpar</button>
@@ -279,18 +283,19 @@ th.active-sort::after {
       <thead>
   <tr>
     <th class="sortable" onclick="ordenarTabela(0)">Selecionar</th>
-    <th class="sortable" onclick="ordenarTabela(1)">Nome</th>
-    <th class="sortable" onclick="ordenarTabela(2)">Email</th>
-    <th class="sortable" onclick="ordenarTabela(3)">Telefone</th>
-    <th class="sortable" onclick="ordenarTabela(4)">Data Compra</th>
-    <th class="sortable" onclick="ordenarTabela(5)">Fatura</th>
-    <th class="sortable" onclick="ordenarTabela(6)">Loja</th>
-    <th class="sortable" onclick="ordenarTabela(7)">Data Submissão</th>
-    <th class="sortable" onclick="ordenarTabela(8)">Unidades</th>
-    <th class="sortable" onclick="ordenarTabela(9)">IMEIs</th>
-    <th class="sortable" onclick="ordenarTabela(10)">Anexos</th>
-    <th class="sortable" onclick="ordenarTabela(11)">Observações</th>
-    <th class="sortable" onclick="ordenarTabela(12)">Email Vencedor</th>
+    <th class="sortable" onclick="ordenarTabela(1)">ID</th>
+    <th class="sortable" onclick="ordenarTabela(2)">Nome</th>
+    <th class="sortable" onclick="ordenarTabela(3)">Email</th>
+    <th class="sortable" onclick="ordenarTabela(4)">Telefone</th>
+    <th class="sortable" onclick="ordenarTabela(5)">Data Compra</th>
+    <th class="sortable" onclick="ordenarTabela(6)">Fatura</th>
+    <th class="sortable" onclick="ordenarTabela(7)">Loja</th>
+    <th class="sortable" onclick="ordenarTabela(8)">Data Submissão</th>
+    <th class="sortable" onclick="ordenarTabela(9)">Unidades</th>
+    <th class="sortable" onclick="ordenarTabela(10)">IMEIs</th>
+    <th class="sortable" onclick="ordenarTabela(11)">Anexos</th>
+    <th class="sortable" onclick="ordenarTabela(12)">Observações</th>
+    <th class="sortable" onclick="ordenarTabela(13)">Email Vencedor</th>
   </tr>
 </thead>
       <tbody></tbody>
@@ -362,6 +367,9 @@ async function carregarSubmissoes() {
     const data = await response.json();
     submissõesGlobais = data.submissoes;
     renderTabela(submissõesGlobais);
+
+    // Atualizar o número de submissões
+    document.getElementById("numSubmissoes").textContent = submissõesGlobais.length;
   } catch (err) {
     console.error("Erro ao carregar submissões:", err);
     alert("Erro ao carregar submissões da API!");
@@ -386,18 +394,15 @@ function renderTabela(lista) {
 
     row.innerHTML = `
       <td><input type="checkbox" class="vencedor"></td>
+      <td>${sub.id || ""}</td>
       <td>${sub.nome || ""}</td>
       <td>${sub.email || ""}</td>
       <td>${sub.telefone || ""}</td>
-      <td data-date="${sub.data_compra}">
-		${new Date(sub.data_compra).toLocaleString("pt-PT")}
-      </td>
+      <td>${new Date(sub.data_compra).toLocaleString("pt-PT")}</td>
       <td>${sub.fatura || ""}</td>
       <td>${sub.loja || ""}</td>
       <!--<td>${sub.morada || ""}</td>-->
-      <td data-date="${sub.data_submissao}">
-		${new Date(sub.data_submissao).toLocaleString("pt-PT")}
-	  </td>
+      <td>${new Date(sub.data_submissao).toLocaleString("pt-PT")}</td>
       <td>${sub.unidades || ""}</td>
       <td>${sub.imeis || ""}</td>
       <td>${anexosHTML}</td>
@@ -593,11 +598,8 @@ function ordenarTabela(indiceColuna) {
     if (!isNaN(valA) && !isNaN(valB)) return asc ? valA - valB : valB - valA;
 
     // data
-    const rawA = a.children[indiceColuna].getAttribute("data-date");
-	const rawB = b.children[indiceColuna].getAttribute("data-date");
-
-	const dataA = rawA ? new Date(rawA).getTime() : NaN;
-	const dataB = rawB ? new Date(rawB).getTime() : NaN;
+    const dataA = Date.parse(valA);
+    const dataB = Date.parse(valB);
     if (!isNaN(dataA) && !isNaN(dataB))
       return asc ? dataA - dataB : dataB - dataA;
 
