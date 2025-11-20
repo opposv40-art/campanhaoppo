@@ -535,60 +535,6 @@ async function enviarEmail() {
   alert('Emails enviados com sucesso!');
 }
 
-// Função para enviar email apenas para as linhas selected
-async function enviarEmailSelecionados() {
-  const linhas = document.querySelectorAll('#tabelaSubmissoes tbody tr');
-  const selecionados = [];
-
-  linhas.forEach(linha => {
-    const checkbox = linha.querySelector('.vencedor');
-    if (checkbox.checked) {
-      selecionados.push({
-        nome: linha.cells[2].textContent,
-        email: linha.cells[3].textContent,
-        loja: linha.cells[7].textContent,
-        dataCompra: linha.cells[8].textContent,
-        telefone: linha.cells[4].textContent,
-        unidades: linha.cells[9].textContent,
-        imeis: linha.cells[10].textContent,
-        status
-      });
-    }
-  });
-
-  if (selecionados.length === 0) {
-    alert('Nenhuma linha selecionada!');
-    return;
-  }
-
-  for (const s of selecionados) {
-    try {
-      await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          service_id: "service_5yjq4gr", // Substituir pelo ID do serviço
-          template_id: "template_p1md6xg", // Substituir pelo ID do template
-          user_id: "l6aSZbA4Hliu-0Ljj", // Substituir pelo ID do usuário
-          template_params: {
-            nome: s.nome,
-            email: s.email,
-            loja: s.loja,
-            data_compra: s.dataCompra,
-            telefone: s.telefone,
-            unidades: s.unidades,
-            imeis: s.imeis
-          }
-        })
-      });
-    } catch (err) {
-      console.error("Erro ao enviar email para:", s.email, err);
-    }
-  }
-
-  alert('Emails enviados com sucesso!');
-}
-
 async function exportarExcel() {
   try {
     const token = localStorage.getItem("token");
