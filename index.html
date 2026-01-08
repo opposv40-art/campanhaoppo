@@ -113,7 +113,8 @@
 
 <div class="site">
 
-  <!--<div class="hero-header">
+  <!-- ✅ CAMPANHA A DECORRER (ESCONDIDA)
+  <div class="hero-header">
     <div class="badge-new">Campanha a decorrer</div>
     <h1 id="heroTitle"></h1>
     <p id="heroSubtitle"></p>
@@ -123,6 +124,7 @@
     <img id="heroImg" src="oppo-reno-15-2.webp">
     <button class="clickable" id="heroBtn" aria-label="Ver campanha atual"></button>
   </section>
+  -->
 
   <section class="section">
     <h3>Campanhas terminadas</h3>
@@ -137,7 +139,7 @@ const current = {
   subtitle: 'Clique na imagem para iniciar o seu registo para redenção da oferta',
   link: 'campanha.html'
 };
--->
+
 const previous = [{
   title: 'Campanha Oppo Find X9 Pro',
   subtitle: 'Documentos e ofertas da campanha',
@@ -148,12 +150,12 @@ const previous = [{
   ]
 }];
 
-document.getElementById('heroTitle').textContent = current.title;
-document.getElementById('heroSubtitle').textContent = current.subtitle;
-
-document.getElementById('heroBtn').onclick = () => {
-  window.location.href = current.link;
-};
+// ✅ CAMPANHA A DECORRER (JS DESATIVADO)
+// document.getElementById('heroTitle').textContent = current.title;
+// document.getElementById('heroSubtitle').textContent = current.subtitle;
+// document.getElementById('heroBtn').onclick = () => {
+//   window.location.href = current.link;
+// };
 
 const list = document.getElementById('campaignList');
 
@@ -187,4 +189,3 @@ document.querySelectorAll('.campaign-card').forEach(c=>io.observe(c));
 
 </body>
 </html>
-
