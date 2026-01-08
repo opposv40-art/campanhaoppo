@@ -230,6 +230,14 @@ th.active-sort::after {
   font-size: 12px;
 }
 
+    /* Tabs styling for versions */
+    .tabs{display:flex;gap:8px;align-items:flex-end}
+    .tabs .tab{appearance:none;border:1px solid transparent;background:transparent;padding:8px 14px;border-top-left-radius:8px;border-top-right-radius:8px;cursor:pointer;color:#198896ff;font-weight:600}
+    .tabs .tab:hover{background:rgba(25,136,150,0.06)}
+    .tabs .tab.active{background:#fff;border-color:#e6eef0;border-bottom-color:transparent;color:#0b6b63;box-shadow:0 -1px 0 0 rgba(0,0,0,0.02) inset}
+    /* container underline to separate tabs from table */
+    .tabs-container{border-bottom:1px solid rgba(0,0,0,0.06);padding-bottom:8px;margin-bottom:12px}
+
   </style>
 </head>
 <body>
@@ -276,6 +284,14 @@ th.active-sort::after {
       <div class="filter-buttons">
         <button onclick="filtrarSubmissoes()">Filtrar</button>
         <button onclick="limparFiltros()">Limpar</button>
+      </div>
+    </div>
+
+    <!-- Versão tabs -->
+    <div class="tabs-container">
+      <div class="tabs" id="versionTabs">
+        <button class="tab" data-version="1" id="tabV1" role="tab" aria-selected="false">OPPO Campanha X9 Pro (<span id="countV1">0</span>)</button>
+        <button class="tab active" data-version="2" id="tabV2" role="tab" aria-selected="true">OPPO Campanha Reno15 Pro (<span id="countV2">0</span>)</button>
       </div>
     </div>
 
@@ -328,7 +344,7 @@ async function fetchComAuth(url, options = {}) {
   let response = await fetch(url, { ...options, headers });
 
   if (response.status === 401 && refreshToken) {
-    const refreshResponse = await fetch("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/refresh-token", {
+    const refreshResponse = await fetch("Http://localhost:8000/api/externos/refresh-token", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh_token: refreshToken }),
@@ -361,14 +377,16 @@ let submissõesGlobais = [];
 // 🔹 Carregar submissões
 async function carregarSubmissoes() {
   try {
-    const response = await fetchComAuth("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/list");
+    const response = await fetchComAuth("Http://localhost:8000/api/externos/campanhaoppo/list");
     if (!response.ok) throw new Error("Erro ao obter submissões");
 
     const data = await response.json();
     submissõesGlobais = data.submissoes;
-    renderTabela(submissõesGlobais);
+    // Update counts and render according to active tab and filters
+    updateVersionCounts();
+    filtrarSubmissoes();
 
-    // Atualizar o número de submissões
+    // Atualizar o número de submissões (total)
     document.getElementById("numSubmissoes").textContent = submissõesGlobais.length;
   } catch (err) {
     console.error("Erro ao carregar submissões:", err);
@@ -381,7 +399,16 @@ function renderTabela(lista) {
   const tbody = document.querySelector("#tabelaSubmissoes tbody");
   tbody.innerHTML = "";
 
-  lista.forEach(sub => {
+  // Apply version tab filter (default to version 1 if none selected)
+  const activeTab = document.querySelector('.tab.active');
+  const selectedVersion = activeTab ? activeTab.dataset.version : '1';
+  const listaFiltradaPorVersao = lista.filter(s => {
+    // some backend items may have version as number or string
+    if (selectedVersion === 'all') return true;
+    return (s.version == selectedVersion);
+  });
+
+  listaFiltradaPorVersao.forEach(sub => {
     const row = document.createElement("tr");
     row.dataset.id = sub.id;
 
@@ -491,7 +518,7 @@ async function enviarEmail() {
 
   try {
     const ids = selecionados.map(s => s.id);
-    const response = await fetchComAuth("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/winners", {
+    const response = await fetchComAuth("Http://localhost:8000/api/externos/campanhaoppo/winners", {
       method: "POST",
       body: JSON.stringify({ ids }),
     });
@@ -523,15 +550,25 @@ async function enviarEmail() {
         })
       });
 
-      s.status.textContent = 'Enviado';
-      s.status.classList.remove('nao-enviado');
-      s.status.classList.add('enviado');
+      // Update DOM status if present
+      if (s.status && s.status.textContent !== undefined) {
+        s.status.textContent = 'Enviado';
+        s.status.classList.remove('nao-enviado');
+        s.status.classList.add('enviado');
+      }
+      // Persist the change in the in-memory submissions so re-render keeps it
+      try {
+        const id = s.id;
+        const subObj = submissõesGlobais.find(x => String(x.id) === String(id));
+        if (subObj) subObj.vencedor = true;
+      } catch (e) { /* ignore */ }
 
     } catch (err) {
       console.error('Erro ao enviar email:', err);
     }
   }
-
+  // refresh counts so tabs reflect new estado
+  updateVersionCounts();
   alert('Emails enviados com sucesso!');
 }
 
@@ -543,7 +580,9 @@ async function enviarEmailSelecionados() {
   linhas.forEach(linha => {
     const checkbox = linha.querySelector('.vencedor');
     if (checkbox.checked) {
+      const statusEl = linha.querySelector('.email-status');
       selecionados.push({
+        id: linha.dataset.id,
         nome: linha.cells[2].textContent,
         email: linha.cells[3].textContent,
         loja: linha.cells[7].textContent,
@@ -551,7 +590,7 @@ async function enviarEmailSelecionados() {
         telefone: linha.cells[4].textContent,
         unidades: linha.cells[9].textContent,
         imeis: linha.cells[10].textContent,
-        status
+        status: statusEl
       });
     }
   });
@@ -581,19 +620,39 @@ async function enviarEmailSelecionados() {
           }
         })
       });
+
+      // update DOM status and persist in-memory
+      if (s.status && s.status.textContent !== undefined) {
+        s.status.textContent = 'Enviado';
+        s.status.classList.remove('nao-enviado');
+        s.status.classList.add('enviado');
+      }
+      try {
+        const id = s.id;
+        const subObj = submissõesGlobais.find(x => String(x.id) === String(id));
+        if (subObj) subObj.vencedor = true;
+      } catch(e){}
+
+
     } catch (err) {
       console.error("Erro ao enviar email para:", s.email, err);
     }
   }
-
+  // refresh counts so tabs reflect new estado
+  updateVersionCounts();
   alert('Emails enviados com sucesso!');
 }
 
 async function exportarExcel() {
   try {
     const token = localStorage.getItem("token");
+    // determine selected version from tabs
+    const activeTab = document.querySelector('.tab.active');
+    const selectedVersion = activeTab ? activeTab.dataset.version : null;
+    // append version as query param so backend can return only that version
+    const url2 = selectedVersion ? `Http://localhost:8000/api/externos/campanhaoppo/export?version=${encodeURIComponent(selectedVersion)}` : "Http://localhost:8000/api/externos/campanhaoppo/export";
 
-    const response = await fetch("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/export", {
+    const response = await fetch(url2, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
@@ -676,6 +735,28 @@ function ordenarTabela(indiceColuna) {
 // 🔹 Variáveis de estado do modal
 let submissaoAtualId = null;
 
+// Update version tab counts
+function updateVersionCounts(){
+  const v1 = submissõesGlobais.filter(s => s.version == 1).length;
+  const v2 = submissõesGlobais.filter(s => s.version == 2).length;
+  const el1 = document.getElementById('countV1');
+  const el2 = document.getElementById('countV2');
+  if(el1) el1.textContent = v1;
+  if(el2) el2.textContent = v2;
+}
+
+// Tab click wiring
+document.addEventListener('click', function(ev){
+  const tab = ev.target.closest && ev.target.closest('.tab');
+  if(!tab) return;
+  // toggle active and aria state
+  document.querySelectorAll('.tab').forEach(t=>{ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+  tab.classList.add('active');
+  tab.setAttribute('aria-selected','true');
+  // re-run filters/render
+  filtrarSubmissoes();
+});
+
 // 🔹 Abre o modal de edição
 function abrirModal(id, textoAtual) {
   submissaoAtualId = id;
@@ -698,7 +779,7 @@ async function guardarObservacao() {
   if (!submissaoAtualId) return;
 
   try {
-    const response = await fetchComAuth("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/admin-notes", {
+    const response = await fetchComAuth("Http://localhost:8000/api/externos/campanhaoppo/admin-notes", {
       method: "POST",
       body: JSON.stringify({
         submission_id: submissaoAtualId,
