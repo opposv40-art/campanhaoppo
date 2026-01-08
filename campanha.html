@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <!-- intl-tel-input CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+  <meta charset="UTF-8">
+  <title>Campanha OPPO</title>
+
+  <!-- Importar Montserrat do Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="./favicon.ico">
+  <style>
+
+  
+
+   body {
+    font-family: 'Montserrat', sans-serif;
+    background: #ffffffff;
+    display: flex;
+    justify-content: flex-start; /* começa à esquerda */
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 30px;
+    overflow-x: auto; /* 👈 permite scroll horizontal */
+    overflow-y: auto;
+  }
+
+  /* --- Layout base (desktop) --- */
+.wrapper {
+  display: flex;
+  flex-direction: row; /* imagem e form lado a lado */
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 1900px; /* para desktop largo */
+  min-height: 50vh;
+  background: url('./rosto_campanha_nova2.jpg') no-repeat center left;
+  background-size: cover;
+}
+
+/* --- Layout responsivo para mobile --- */
+@media (max-width: 1024px) {
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-x: auto; /* ❌ não queremos scroll lateral */
+    overflow-y: auto;   /* ✅ scroll vertical permitido */
+    width: 100%;
+  }
+
+  .wrapper {
+    flex-direction: column; /* imagem em cima, form em baixo */
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    min-width: 100%;
+    background: none; /* removemos o fundo grande do desktop */
+  }
+
+  /* Imagem no topo — ocupa sempre 100% da largura do ecrã */
+  .wrapper::before {
+  content: "";
+  display: block;
+  min-width: 100%;
+  height: 65vh;
+  margin-left: 10px;
+  margin-top: -1.7vh;
+  background: url('./oppo_Find X9 Pro_Web Campanhas_16-9 copy.jpg') no-repeat center center;
+  background-size: contain; /* mostra sempre a imagem inteira */
+  background-color: #fff; /* opcional: fundo branco por baixo da imagem */
+}
+
+  .container {
+    width: 100%;
+    max-width: none; /* ocupa toda a largura */
+    margin-left: 70px;
+    margin-top: -3vh;
+    padding: 24px 20px;
+    box-shadow: none;
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  h2, h3 {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  label, input, select, button {
+    font-size: 1rem;
+  }
+
+  button {
+    padding: 14px;
+  }
+}
+
+
+   .wrapper img {
+   max-width: 400px;
+   height: auto;
+   }
+
+   .container {
+   background: rgba(255, 255, 255, 0.92);
+   padding: 40px;
+   border-radius: 16px;
+   box-shadow: 0px 6px 18px rgba(0,0,0,0.15);
+   width: 480px;
+   max-width: 90%;
+   margin-right: clamp(80px, 6.5vw, 50px); /* ajusta para alinhar com o espaço branco da imagem */
+   transform: scale(0.95);
+   }
+
+   h2 {
+   text-align: center;
+   margin-bottom: 25px;
+   color: #2b2d42;
+   font-weight: 300; /* light */
+   }
+
+   h3 {
+   text-align: center;
+   margin-bottom: 0px;
+   margin-top: -25px;
+   color: #2b2d42;
+   font-weight: 300; /* light */
+   }
+
+   label {
+   display: block;
+   margin-top: 15px;
+   color: #444;
+   font-weight: 400;
+   }
+
+   input, select {
+   width: 100%;
+   padding: 12px 24px 12px 12px;
+   margin-top: 6px;
+   border-radius: 8px;
+   border: 1px solid #ccc;
+   font-size: 15px;
+   box-sizing: border-box;
+   }
+
+   input[type="file"] {
+   border: none;
+   padding: 0;
+   }
+
+   button {
+   font-family: 'Montserrat', sans-serif;
+   margin-top: 25px;
+   width: 100%;
+   padding: 14px;
+   background: #00a884;
+   color: white;
+   border: none;
+   border-radius: 8px;
+   font-size: 16px;
+   cursor: pointer;
+   font-weight: 600;
+   }
+
+   button:hover {
+   background: #008f72;
+   }
+
+   .success {
+   font-family: 'Montserrat', sans-serif;
+   text-align: center;
+   margin-top: 18px;
+   color: green;
+   font-weight: 600;
+   }
+
+   /* Modal */
+   .modal {
+   display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+   width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+   justify-content: center; align-items: center;
+   }
+
+   .modal-content {
+   background: white; padding: 30px; border-radius: 12px;
+   text-align: center; max-width: 400px; width: 90%;
+   box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+   }
+
+   .modal-content p { margin-bottom: 20px; color: #333; font-weight: 500; }
+   .modal-content button {
+   background: #00a884; border: none; color: white;
+   padding: 10px 20px; border-radius: 8px; cursor: pointer;
+   }
+
+   .modal-content button:hover { background: #008f72; }
+   .image-wrapper {
+   position: relative;
+   }
+
+   .image-wrapper img {
+   display: block;
+   max-width: 400px; /* ajusta como precisares */
+   height: auto;
+   }
+
+   .image-wrapper h1 {
+   position: absolute;
+   top: 6%;       /* centraliza verticalmente */
+   left: 50%;      /* centraliza horizontalmente */
+   transform: translate(-50%, -50%); /* ajusta para ficar bem centrado */
+   color: black;   /* cor do texto */
+   font-size: 4rem;
+   font-weight: normal;
+   text-align: center;
+   font-family: 'Montserrat', sans-serif;
+   text-shadow: 2px 2px 5px rgba(0,0,0,0.7); /* sombra para contraste */
+   }
+
+   #imeiContainer {
+   display: grid;
+   grid-template-columns: repeat(2, 1fr); /* duas colunas */
+   gap: 12px 16px; /* espaçamento vertical e horizontal */
+   margin-top: 8px;
+   }
+
+   .imei-field {
+   display: flex;
+   flex-direction: column;
+   }
+
+   #imeiContainer label {
+   margin-top: 10px;
+   font-weight: 500;
+   color: #444;
+   }
+
+   #imeiContainer input {
+   width: 100%;
+   }
+
+   .header-nav-main{position:sticky;top:0;z-index:60;background:rgba(255,255,255,0.96);backdrop-filter:blur(1px);box-shadow:0 1px 0 rgba(0,0,0,0.04)}
+    .header-nav-main .nav-inner{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;}
+    .nav-logo{display:inline-flex;align-items:center;}
+    .nav-logo img{height:65px;display:block}
+    .nav-logo .logo-text{display:inline-block;line-height:1;font-weight:600;margin-top:0}
+    .nav-links{display:flex;gap:18px;align-items:center;margin-left:1px}
+    .nav-link{color:#111;text-decoration:none;font-weight:600;padding:6px 4px;border-radius:4px}
+    .nav-link:hover{background:rgba(0,0,0,0.03)}
+    .nav-cta{margin-left:auto;padding:8px 14px;border-radius:6px;background:var(--accent);color:#fff;border:0;font-weight:700;cursor:pointer}
+    .nav-cta:hover{filter:brightness(.98)}
+    .nav-toggle{display:none;background:transparent;border:0;font-size:20px;margin-left:auto;padding:6px 8px;cursor:pointer}
+    .nav-mobile{display:none;padding:12px;background:#fff;border-top:1px solid rgba(0,0,0,0.04)}
+    .nav-mobile a{display:block;padding:8px 4px;color:#111;text-decoration:none;font-weight:600}
+    .nav-mobile .mobile-cta{display:block;margin-top:8px;padding:8px;border-radius:6px;background:var(--accent);color:#fff;text-align:center}
+    .header-nav-main.open .nav-mobile{display:block}
+
+    .nav-inner{
+  justify-content: flex-start;
+}
+
+/* Grupo logo */
+.nav-logo{
+  display: inline-flex;
+  align-items: left;
+  gap: 17px;            /* espaço entre icon e texto */
+}
+
+/* Aumentar o icon sem aumentar a navbar */
+.nav-logo img{
+  height: 70px;         /* tamanho base */
+  transform: scale(1.35);
+  transform-origin: left center;
+}
+
+/* Texto “Campanhas” alinhado com o logo */
+.nav-logo .logo-text{
+  font-weight: 370;
+  font-size: 15px;
+  line-height: 2;
+}
+
+.badge-new{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  color:#fff;
+  letter-spacing:.3px;
+
+  /* Futuristic OPPO-style gradient */
+  background:linear-gradient(
+    135deg,
+    #00e6a8 0%,
+    #00c896 40%,
+    #00a884 100%
+  );
+
+  box-shadow:0 8px 22px rgba(0,168,132,.25);
+  margin-bottom:6px;
+}
+
+  </style>
+</head>
+<body>
+  
+   <!-- Modal -->
+   <div id="errorModal" class="modal">
+      <div class="modal-content">
+         <p id="modalMessage"></p>
+         <button id="modalClose">OK</button>
+      </div>
+   </div>
+   <div class="wrapper">
+      <div class="background">
+         <!-- Form lado direito -->
+         <div class="container">
+            <h2>Campanha de oferta OPPO</h2>
+            <h3>Faça o registo para redenção da oferta</h3>
+            <form id="oppoForm">
+               <label for="nome">Nome:</label>
+               <input type="text" id="nome" name="nome" required>
+               <label for="email">Email:</label>
+               <input type="email" id="email" name="email" required placeholder="email@dominio.com">
+               <label for="telefone" style="padding-bottom:6px;display:block;">Telemóvel do destinatário da oferta:</label>
+               <input type="tel" id="telefone" name="telefone" required style="padding-left:50px;width:100%;box-sizing:border-box;">
+               <label for="rua">Rua para entrega da oferta:</label>
+               <input type="text" id="rua" name="rua" required>
+               <div style="display:flex; gap:8px;">
+                  <div style="flex:1; min-width:90px;">
+                     <label for="porta">Nº da porta:</label>
+                     <input type="text" id="porta" name="porta" required maxlength="10" pattern="[A-Za-z0-9\s]+">
+                  </div>
+                  <div style="flex:1; min-width:90px;">
+                     <label for="andar">Andar:</label>
+                     <input type="text" id="andar" name="andar" maxlength="10" pattern="[A-Za-z0-9\s]+" placeholder="(opcional)">
+                  </div>
+                  <div style="flex:1.2; min-width:120px;">
+                     <label for="codigo_postal">Código Postal:</label>
+                     <input type="text" id="codigo_postal" name="codigo_postal" required maxlength="8" pattern="\d{4}-\d{3}" placeholder="0000-000" oninput="this.value=this.value.replace(/[^0-9\-]/g,'')">
+                  </div>
+               </div>
+               <div style="display:flex; gap:8px;">
+                  <div style="flex:1; min-width:90px;">
+                     <label for="localidade">Localidade:</label>
+                     <input type="text" id="localidade" name="localidade" required maxlength="30">
+                  </div>
+                  <div style="flex:1; min-width:90px;">
+                     <label for="pais" style="padding-bottom:6px;display:block;">País:</label>
+                     <input type="text" id="pais" name="pais" required>
+                  </div>
+               </div>
+               <label for="loja">Loja onde comprou:</label>
+               <select id="loja" name="loja" required></select>
+               <div style="display:flex; gap:8px;">
+                  <div style="flex:1; min-width:90px;">
+                     <label for="fatura">Nº/Referência da Fatura:</label>
+                     <input type="text" id="fatura" name="fatura" required>
+                  </div>
+                  <div style="flex:1; min-width:90px;">
+                     <label for="unidades">Nº de unidades compradas:</label>
+                     <input
+                        type="number"
+                        id="unidades"
+                        name="unidades"
+                        min="1"
+                        max="10"
+                        step="1"
+                        value="1"
+                        required
+                        >
+                  </div>
+               </div>
+               <label for="data_compra">Data e Hora da Fatura/Compra:</label>
+               <input type="datetime-local" id="data_compra" name="data_compra" required>
+               <div id="imeiContainer"></div>
+               <label for="file">Upload da Fatura:</label>
+               <input type="file" id="file" name="file" accept=".jpg,.png,.pdf,.jpeg,.heif" required>
+               <br><br>
+               <div style="display:flex; gap:8px;">
+                  <div style="flex:1; min-width:10px;; max-width:30px;">
+                     <input type="checkbox" id="aceito_rgpd" name="aceito_rgpd" required class="rgpd-checkbox">
+                  </div>
+                  <div style="flex:1; min-width:150px; margin-top:-12px;">
+                     <label for="aceito_rgpd" class="rgpd-label">
+                     Li e aceito os termos e condições RGPD 
+                    <a href="./OPPO Find X9 PRO _Oferta Watch.pdf" target="_blank" style="color:#00a884;text-decoration:underline;">OPPO Reno15 Pro</a>
+                     </label>
+                  </div>
+               </div>
+               <button type="submit">Submeter</button>
+            </form>
+            <p class="success" id="successMsg" style="display:none;"></p>
+         </div>
+      </div>
+   </div>
+   <!-- intl-tel-input JS -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+   <!-- jQuery (necessário para country-select-js) -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <!-- country-select-js CSS & JS -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/country-select-js@2.0.1/build/css/countrySelect.min.css" />
+   <script src="https://cdn.jsdelivr.net/npm/country-select-js@2.0.1/build/js/countrySelect.min.js"></script>
+    <script>
+      const dataLimiteCampanha = new Date("2025-11-02T23:59:00");
+      // Inicializar intl-tel-input
+      const telInput = document.querySelector("#telefone");
+      const iti = window.intlTelInput(telInput, {
+          initialCountry: "pt",
+          separateDialCode: true,
+          onlyCountries: ["pt"],
+          utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+      });
+
+      // --- Gerar campos IMEI dinamicamente ---
+      const unidadesInput = document.getElementById("unidades");
+      const imeiContainer = document.getElementById("imeiContainer");
+      imeiContainer.style.display = "none";
+
+      const dataCompraInput = document.getElementById("data_compra");
+
+      // 🔹 Função que atualiza visibilidade e obrigatoriedade dos campos IMEI
+      function atualizarCamposIMEI() {
+          const dataCompraValor = dataCompraInput.value;
+          if (!dataCompraValor) {
+              imeiContainer.style.display = "none";
+              return;
+          }
+
+          const dataCompra = new Date(dataCompraValor);
+          const unidades = parseInt(unidadesInput.value) || 1;
+
+          // Se a data for superior ao limite, mostra e torna obrigatório
+          if (dataCompra > dataLimiteCampanha) {
+              gerarCamposIMEI(unidades);
+              imeiContainer.style.display = "grid";
+              document.querySelectorAll("#imeiContainer input").forEach(input => {
+                  input.required = true;
+              });
+          } else {
+              imeiContainer.innerHTML = ""; // remove campos se já existirem
+              imeiContainer.style.display = "none";
+          }
+      }
+
+      // 🔹 Eventos que disparam a atualização
+      dataCompraInput.addEventListener("change", atualizarCamposIMEI);
+      unidadesInput.addEventListener("input", atualizarCamposIMEI);
+
+
+      function gerarCamposIMEI(qtd) {
+          if (qtd > 10) qtd = 10; // limite máximo de 10 campos
+          imeiContainer.innerHTML = ""; // limpa campos antigos
+          for (let i = 1; i <= qtd; i++) {
+              const div = document.createElement("div");
+              div.className = "imei-field";
+
+              const label = document.createElement("label");
+              label.htmlFor = `imei${i}`;
+              label.textContent = `IMEI1 do ${i}º Find X9 PRO:`;
+
+              const input = document.createElement("input");
+              input.type = "text";
+              input.id = `imei${i}`;
+              input.name = `imei${i}`;
+              input.maxLength = 20;
+              input.pattern = "[0-9]+";
+              input.placeholder = `Introduza o IMEI1`;
+              input.required = false; // ⚠️ por defeito, não obrigatório
+              input.addEventListener("input", function() {
+                  this.value = this.value.replace(/[^0-9]/g, '');
+              });
+
+              div.appendChild(label);
+              div.appendChild(input);
+              imeiContainer.appendChild(div);
+          }
+      }
+
+      // Gera automaticamente 1 IMEI no início
+      gerarCamposIMEI(parseInt(unidadesInput.value) || 1);
+
+      // Atualiza quando muda o número de unidades
+      unidadesInput.addEventListener("input", function() {
+          const qtd = parseInt(this.value) || 1;
+          gerarCamposIMEI(qtd);
+      });
+
+      // Impedir letras no campo telefone
+      telInput.addEventListener('input', function(e) {
+          this.value = this.value.replace(/[^0-9+\s()-]/g, '');
+      });
+
+      // Impedir caracteres especiais no campo nome
+      const nomeInput = document.getElementById('nome');
+      nomeInput.addEventListener('input', function(e) {
+          this.value = this.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+      });
+
+      // Impedir vírgulas no campo email
+      const emailInput = document.getElementById('email');
+      emailInput.addEventListener('input', function(e) {
+          this.value = this.value.replace(/,/g, '');
+      });
+
+      // Impedir caracteres especiais em rua, código postal e localidade
+      const ruaInput = document.getElementById('rua');
+      const codigoPostalInput = document.getElementById('codigo_postal');
+      const localidadeInput = document.getElementById('localidade');
+
+      ruaInput.addEventListener('input', function(e) {
+          this.value = this.value.replace(/[^A-Za-zÀ-ÿ0-9\s]/g, '');
+      });
+      codigoPostalInput.addEventListener('input', function(e) {
+          this.value = this.value.replace(/[^0-9\s-]/g, '');
+      });
+      localidadeInput.addEventListener('input', function(e) {
+          this.value = this.value.replace(/[^A-Za-zÀ-ÿ0-9\s]/g, '');
+      });
+      // Carregar lojas do endpoint
+      fetch('http://localhost:8000/api/externos/campanhaoppo/lojas')
+          .then(res => res.json())
+          .then(data => {
+              const select = document.getElementById('loja');
+              select.innerHTML = '';
+              data.lojas.forEach(loja => {
+                  const option = document.createElement('option');
+                  option.value = loja.value;
+                  option.textContent = loja.value;
+                  select.appendChild(option);
+              });
+          });
+      // Inicializar country-select-js para o campo país
+      $(function() {
+          $('#pais').countrySelect({
+              defaultCountry: 'pt',
+              onlyCountries: ['pt']
+          });
+      });
+      document.getElementById("oppoForm").addEventListener("submit", function(event) {
+          event.preventDefault();
+          // Preparar dados para JSON
+          const email = document.getElementById("email").value.trim();
+          const rua = document.getElementById("rua").value.trim();
+          const porta = document.getElementById("porta").value.trim();
+          const andar = document.getElementById("andar").value.trim();
+          const codigo_postal = document.getElementById("codigo_postal").value.trim();
+          const localidade = document.getElementById("localidade").value.trim();
+          const pais = document.getElementById("pais").value.trim();
+          const version = 2;
+          let morada = `${rua}, Nº ${porta}`;
+          if (andar) morada += `, Andar ${andar}`;
+          morada += `, ${codigo_postal} ${localidade}, ${pais}`;
+          // Recolher IMEIs
+          let imeis = '';
+          for (let i = 1; i <= parseInt(document.getElementById("unidades").value || "1"); i++) {
+              const imeiInput = document.getElementById(`imei${i}`);
+              if (imeiInput && imeiInput.value.trim()) {
+                  imeis += (imeis ? ',' : '') + imeiInput.value.trim();
+              }
+          }
+
+          const data = {
+              nome: document.getElementById("nome").value.trim(),
+              email: email,
+              telefone: iti.getNumber(),
+              loja: document.getElementById("loja").value,
+              morada: morada,
+              fatura: document.getElementById("fatura").value.trim(),
+              data_compra: document.getElementById("data_compra").value,
+              unidades: document.getElementById("unidades").value.trim(),
+              imeis: imeis, // 👈 novo campo array
+              version: version
+          };
+          // Preparar formData para ficheiro
+          const fileInput = document.getElementById("file");
+          const formData = new FormData();
+          formData.append("data", JSON.stringify(data));
+          if (fileInput.files.length > 0) {
+              formData.append("file", fileInput.files[0]);
+          }
+          fetch('http://localhost:8000/api/externos/campanhaoppo', {
+                  method: 'POST',
+                  body: formData
+              })
+              .then(async res => {
+                  if (res.status === 200) {
+                    // ✅ Enviar email via EmailJS
+                    try {
+                        await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                service_id: "service_5yjq4gr",         // mesmo do backoffice
+                                template_id: "template_p1md6xg",       // novo template
+                                user_id: "l6aSZbA4Hliu-0Ljj",          // mesmo do backoffice
+                                template_params: {
+                                    nome: data.nome,
+                                    loja: data.loja,
+                                    data_compra: data.data_compra,
+                                    email: data.email,
+                                    telefone: data.telefone,
+                                    unidades: data.unidades,
+                                    imeis: data.imeis || "",
+                                    fatura: data.fatura,
+                                    morada: data.morada,
+                                    version: data.version
+                                }
+                            })
+                        });
+                        console.log("Email enviado com sucesso!");
+                    } catch (err) {
+                        console.error("Erro ao enviar email via EmailJS:", err);
+                    }
+
+                    // Redirecionar após enviar email
+                    window.location.href = 'concluido.html';
+                    return;
+                } else {
+                      if (res.status === 400) {
+                          const errorData = await res.json();
+                          const modal = document.getElementById("errorModal");
+                          const modalMessage = document.getElementById("modalMessage");
+                          modalMessage.textContent = errorData.detail || "Erro desconhecido.";
+                          modal.style.display = "flex";
+                          const modalClose = document.getElementById("modalClose");
+                          modalClose.addEventListener("click", function() {
+                              modal.style.display = "none";
+                          });
+                          return;
+                      }
+                  }
+              // ⚠️ Renomeado para evitar conflito com "data" do formulário
+                const resposta = await res.json();
+                const msg = document.getElementById("successMsg");
+              
+                if (resposta.status === 'ok') {
+                  msg.textContent = "Formulário enviado com sucesso!";
+                  msg.style.color = "green";
+                  msg.style.display = "block";
+                  document.getElementById("oppoForm").reset();
+                } else {
+                  msg.textContent = "Erro: " + JSON.stringify(resposta.errors);
+                  msg.style.color = "red";
+                  msg.style.display = "block";
+                }
+              })
+              .catch(() => {
+                const msg = document.getElementById("successMsg");
+                msg.textContent = "Erro ao submeter. Tente novamente.";
+                msg.style.color = "red";
+                msg.style.display = "block";
+              });
+      });
+    </script>
+  </body>
+</html>
