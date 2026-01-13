@@ -53,7 +53,11 @@
     }
 
     .hero-header h1{font-size:26px;font-weight:400;margin:0}
-    .hero-header p{margin:6px 0 0;color:#444}
+    .hero-header p{
+      margin:6px 0 18px;   /* 👈 aumenta o espaço em baixo */
+      color:#444;
+    }
+
 
     .section{margin-top:32px;border-top:1px solid rgba(0,0,0,.08);padding-top:18px}
     .section h3{text-align:center;font-weight:400;font-size:22px;margin-bottom:16px}
@@ -112,8 +116,6 @@
 </header>
 
 <div class="site">
-
-   ✅ CAMPANHA A DECORRER (ESCONDIDA)
   <div class="hero-header">
     <div class="badge-new">Campanha a decorrer</div>
     <h1 id="heroTitle"></h1>
@@ -136,7 +138,7 @@
 <script>
 const current = {
   title: 'Campanha OPPO Reno15 Pro',
-  subtitle: 'Clique na imagem para iniciar o seu registo para redenção da oferta',
+  subtitle: '<strong>Clique na imagem para iniciar o seu registo para redenção da oferta</strong>',
   link: 'campanha.html'
 };
 
@@ -150,9 +152,9 @@ const previous = [{
   ]
 }];
 
- ✅ CAMPANHA A DECORRER (JS DESATIVADO)
+
  document.getElementById('heroTitle').textContent = current.title;
- document.getElementById('heroSubtitle').textContent = current.subtitle;
+ document.getElementById('heroSubtitle').innerHTML = current.subtitle;
  document.getElementById('heroBtn').onclick = () => {
    window.location.href = current.link;
  };
@@ -189,4 +191,3 @@ document.querySelectorAll('.campaign-card').forEach(c=>io.observe(c));
 
 </body>
 </html>
-
