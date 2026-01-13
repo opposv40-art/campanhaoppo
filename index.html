@@ -115,6 +115,8 @@
   </div>
 </header>
 
+<!--
+  
 <div class="site">
   <div class="hero-header">
     <div class="badge-new">Campanha a decorrer</div>
@@ -126,7 +128,8 @@
     <img id="heroImg" src="oppo-reno-15-2.webp">
     <button class="clickable" id="heroBtn" aria-label="Ver campanha atual"></button>
   </section>
-  
+
+  -->
 
   <section class="section">
     <h3>Campanhas terminadas</h3>
@@ -136,6 +139,7 @@
 </div>
 
 <script>
+
 const current = {
   title: 'Campanha OPPO Reno15 Pro',
   subtitle: '<strong>Clique na imagem para iniciar o seu registo para redenção da oferta</strong>',
@@ -153,11 +157,11 @@ const previous = [{
 }];
 
 
- document.getElementById('heroTitle').textContent = current.title;
- document.getElementById('heroSubtitle').innerHTML = current.subtitle;
- document.getElementById('heroBtn').onclick = () => {
-   window.location.href = current.link;
- };
+ //document.getElementById('heroTitle').textContent = current.title;
+ //document.getElementById('heroSubtitle').innerHTML = current.subtitle;
+ //document.getElementById('heroBtn').onclick = () => {
+   //window.location.href = current.link;
+ //};
 
 const list = document.getElementById('campaignList');
 
@@ -191,3 +195,4 @@ document.querySelectorAll('.campaign-card').forEach(c=>io.observe(c));
 
 </body>
 </html>
+
