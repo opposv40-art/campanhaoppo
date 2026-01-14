@@ -115,6 +115,8 @@
   </div>
 </header>
 
+
+<!--
 <div class="site">
   <div class="hero-header">
     <div class="badge-new">Campanha a decorrer</div>
@@ -126,7 +128,8 @@
     <img id="heroImg" src="imagem_campanha_botao.jpg">
     <button class="clickable" id="heroBtn" aria-label="Ver campanha atual"></button>
   </section>
-  
+
+  -->
 
   <section class="section">
     <h3>Campanhas terminadas</h3>
@@ -152,10 +155,10 @@ const previous = [{
 }];
 
 
- document.getElementById('heroTitle').textContent = current.title;
- document.getElementById('heroBtn').onclick = () => {
-   window.location.href = current.link;
- };
+ //document.getElementById('heroTitle').textContent = current.title;
+ //document.getElementById('heroBtn').onclick = () => {
+   //window.location.href = current.link;
+ //};
 
 const list = document.getElementById('campaignList');
 
@@ -189,3 +192,4 @@ document.querySelectorAll('.campaign-card').forEach(c=>io.observe(c));
 
 </body>
 </html>
+
