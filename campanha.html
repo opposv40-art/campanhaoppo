@@ -51,6 +51,24 @@
     width: 100%;
   }
 
+  /* garante que a navbar ocupa 100% da largura no mobile */
+  .header-nav-main {
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  /* remove o max-width centrar e faz a nav-inner preencher todo o espaço */
+  .header-nav-main .nav-inner {
+    max-width: 100% !important;
+    margin: 0;
+    padding: 0 16px; /* espaço lateral */
+    box-sizing: border-box;
+  }
+
+  /* opcional: garantir que o logo fica alinhado à esquerda */
+  .nav-inner { justify-content: flex-start; }
+
   .wrapper {
     flex-direction: column; /* imagem em cima, form em baixo */
     justify-content: flex-start;
@@ -68,9 +86,9 @@
   height: 65vh;
   margin-left: 10px;
   margin-top: -1.7vh;
-  background: url('./rosto_campanha_nova2.jpg') no-repeat center center;
+  background: url('./rosto_campanha_nova3.jpg') no-repeat center center;
   background-size: contain; /* mostra sempre a imagem inteira */
-  background-color: #fff; /* opcional: fundo branco por baixo da imagem */
+  background-color: #F8F3EF; /* opcional: fundo branco por baixo da imagem */
 }
 
   .container {
@@ -671,8 +689,3 @@
   </body>
 
 </html>
-
-
-
-
-
