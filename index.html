@@ -13,16 +13,52 @@
 
     .site{max-width:var(--max-width);margin:0 auto;padding:18px}
 
+    /* HEADER – IGUAL AO ECRÃ ANTERIOR */
     .header-nav-main{
-      position:sticky;top:0;z-index:60;
-      background:rgba(255,255,255,0.96);
-      box-shadow:0 1px 0 rgba(0,0,0,0.04)
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      height: 58px;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(2px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.06);
     }
 
-    .nav-inner{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center}
-    .nav-logo{display:inline-flex;align-items:center;gap:17px}
-    .nav-logo img{height:70px;transform:scale(1.35)}
-    .nav-logo .logo-text{font-size:15px;font-weight:400}
+    /* container da navbar – COLADO À ESQUERDA */
+    .header-nav-main .nav-inner{
+      max-width: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    /* logo + texto */
+    .nav-logo{
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* logo OPPO – TAMANHO ORIGINAL */
+    .nav-logo img{
+      height: 70px;
+      transform: scale(1.35);
+      transform-origin: left center;
+      margin-right: 22px;
+    }
+
+    /* texto “Campanhas” */
+    .nav-logo .logo-text{
+      font-size: 15px;
+      font-weight: 370;
+      line-height: 2;
+      color: #000;
+      white-space: nowrap;
+    }
+
 
     .badge-new{
       display:inline-block;padding:6px 12px;border-radius:999px;
@@ -192,6 +228,5 @@ document.querySelectorAll('.campaign-card').forEach(c=>io.observe(c));
 
 </body>
 </html>
-
 
 
