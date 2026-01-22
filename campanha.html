@@ -598,17 +598,29 @@
       });
       // Carregar lojas do endpoint
       fetch('https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/lojas')
-          .then(res => res.json())
-          .then(data => {
-              const select = document.getElementById('loja');
-              select.innerHTML = '';
-              data.lojas.forEach(loja => {
-                  const option = document.createElement('option');
-                  option.value = loja.value;
-                  option.textContent = loja.value;
-                  select.appendChild(option);
-              });
+        .then(res => res.json())
+        .then(data => {
+          const select = document.getElementById('loja');
+          select.innerHTML = '';
+
+          // 🔹 Placeholder inicial (sem seleção real)
+          const placeholder = document.createElement('option');
+          placeholder.value = '';
+          placeholder.textContent = 'Selecione a loja';
+          placeholder.disabled = true;
+          placeholder.selected = true;
+          placeholder.hidden = true; // não aparece depois de abrir
+          select.appendChild(placeholder);
+
+          // 🔹 Lojas reais
+          data.lojas.forEach(loja => {
+            const option = document.createElement('option');
+            option.value = loja.value;
+            option.textContent = loja.value;
+            select.appendChild(option);
           });
+        });
+
       // Inicializar country-select-js para o campo país
       $(function() {
           $('#pais').countrySelect({
@@ -735,10 +747,3 @@
   </body>
 
 </html>
-
-
-
-
-
-
-
