@@ -261,11 +261,52 @@
    width: 100%;
    }
 
-   .header-nav-main{position:sticky;top:0;z-index:60;background:rgba(255,255,255,0.96);backdrop-filter:blur(1px);box-shadow:0 1px 0 rgba(0,0,0,0.04)}
-    .header-nav-main .nav-inner{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;}
-    .nav-logo{display:inline-flex;align-items:center;}
-    .nav-logo img{height:65px;display:block}
-    .nav-logo .logo-text{display:inline-block;line-height:1;font-weight:600;margin-top:0}
+/* HEADER – estilo OPPO */
+.header-nav-main{
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  height: 58px;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+}
+
+.header-nav-main .nav-inner{
+  max-width: none;          /* 👈 remove o centro */
+  width: 100%;
+  height: 100%;
+  margin: 0;               /* 👈 cola à esquerda */
+  padding: 0 24px;         /* espaço lateral tipo OPPO */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Grupo do logo */
+.nav-logo{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;              /* espaço OPPO realista */
+  text-decoration: none;
+}
+
+/* Logo OPPO */
+.nav-logo img{
+  height: 26px;           /* tamanho real OPPO */
+  width: auto;
+  display: block;
+}
+
+/* Texto ao lado do logo */
+.nav-logo .logo-text{
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  color: #000;
+  letter-spacing: .2px;
+}
+
     .nav-links{display:flex;gap:18px;align-items:center;margin-left:1px}
     .nav-link{color:#111;text-decoration:none;font-weight:600;padding:6px 4px;border-radius:4px}
     .nav-link:hover{background:rgba(0,0,0,0.03)}
@@ -284,9 +325,14 @@
 /* Grupo logo */
 .nav-logo{
   display: inline-flex;
-  align-items: left;
-  gap: 17px;            /* espaço entre icon e texto */
+  align-items: center;
 }
+
+/* Dá espaço à direita do LOGO, não mexe no tamanho */
+.nav-logo img{
+  margin-right: 22px;   /* 👈 controla aqui o espaço */
+}
+
 
 /* Aumentar o icon sem aumentar a navbar */
 .nav-logo img{
@@ -357,7 +403,7 @@
                <input type="email" id="email" name="email" required placeholder="email@dominio.com">
                <label for="telefone" style="padding-bottom:6px;display:block;">Telemóvel do destinatário da oferta:</label>
                <input type="tel" id="telefone" name="telefone" required style="padding-left:50px;width:100%;box-sizing:border-box;">
-               <label for="rua">Morada para entrega da oferta:</label>
+               <label for="rua">Rua para entrega da oferta:</label>
                <input type="text" id="rua" name="rua" required>
                <div style="display:flex; gap:8px;">
                   <div style="flex:1; min-width:90px;">
@@ -689,7 +735,6 @@
   </body>
 
 </html>
-
 
 
 
