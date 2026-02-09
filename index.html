@@ -13,7 +13,6 @@
 
     .site{max-width:var(--max-width);margin:0 auto;padding:18px}
 
-    /* HEADER – IGUAL AO ECRÃ ANTERIOR */
     .header-nav-main{
       position: sticky;
       top: 0;
@@ -84,10 +83,7 @@
     }
 
     .hero-header h1{font-size:26px;font-weight:400;margin:0}
-    .hero-header p{
-      margin:6px 0 18px;
-      color:#444;
-    }
+    .hero-header p{margin:6px 0 18px;color:#444}
 
     .section{margin-top:32px;border-top:1px solid rgba(0,0,0,.08);padding-top:18px}
     .section h3{text-align:center;font-weight:400;font-size:22px;margin-bottom:16px}
@@ -167,27 +163,14 @@
 </div>
 
 <script>
-// CAMPANHA ATUAL (DESATIVADA)
-/*
-const current = {
-  title: 'Campanha OPPO Reno15 Pro 5G',
-  link: 'campanha.html'
-};
-
-document.getElementById('heroTitle').textContent = current.title;
-document.getElementById('heroBtn').onclick = () => {
-  window.location.href = current.link;
-};
-*/
-
 const previous = [
   {
     title: 'Campanha OPPO Reno15 Pro 5G',
-    subtitle: 'Documento da campanha',
+    subtitle: 'Documentos e ofertas da campanha',
     image: 'imagem_campanha_botao.jpg',
     links: [
       {
-        text: 'OPPO Reno15 Pro 5G',
+        img: 'campanha_reno_15_watch.png',
         href: './OPPO reno15 Pro 5G Oferta Watch S F.pdf'
       }
     ]
@@ -208,20 +191,14 @@ const list = document.getElementById('campaignList');
 previous.forEach(c=>{
   const card=document.createElement('article');
   card.className='campaign-card';
-
-  const linksHtml = c.links.map(l=>{
-    if(l.img){
-      return `<a class="campaign-link-btn" href="${l.href}" target="_blank"><img src="${l.img}"></a>`;
-    }
-    return `<a href="${l.href}" target="_blank" style="color:#00a884;text-decoration:underline;">${l.text}</a>`;
-  }).join('');
-
   card.innerHTML=`
     <div class="campaign-media"><img src="${c.image}"></div>
     <div class="campaign-body">
       <h3>${c.title}</h3>
       <p>${c.subtitle}</p>
-      <div class="campaign-links">${linksHtml}</div>
+      <div class="campaign-links">
+        ${c.links.map(l=>`<a class="campaign-link-btn" href="${l.href}" target="_blank"><img src="${l.img}"></a>`).join('')}
+      </div>
     </div>
   `;
   list.appendChild(card);
