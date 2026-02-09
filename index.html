@@ -13,7 +13,7 @@
 
     .site{max-width:var(--max-width);margin:0 auto;padding:18px}
 
-    /* HEADER */
+    /* HEADER – IGUAL AO ECRÃ ANTERIOR */
     .header-nav-main{
       position: sticky;
       top: 0;
@@ -25,11 +25,14 @@
     }
 
     .header-nav-main .nav-inner{
+      max-width: none;
       width: 100%;
       height: 100%;
+      margin: 0;
       padding: 0 24px;
       display: flex;
       align-items: center;
+      justify-content: flex-start;
     }
 
     .nav-logo{
@@ -52,32 +55,44 @@
       white-space: nowrap;
     }
 
-    /* ESCONDER CAMPANHA A DECORRER */
-    .hero-header,
+    .badge-new{
+      display:inline-block;padding:6px 12px;border-radius:999px;
+      font-size:13px;font-weight:700;color:#fff;
+      background:linear-gradient(135deg,#00e6a8 0%,#00c896 40%,#00a884 100%);
+      box-shadow:0 8px 22px rgba(0,168,132,.25);
+      margin-bottom:6px;
+    }
+
     .hero{
-      display:none;
+      position:relative;
+      border-radius:10px;
+      overflow:hidden;
+      background:#fff;
+      box-shadow:0 20px 48px rgba(15,22,35,.1);
+      transition:.3s;
+    }
+    .hero:hover{transform:translateY(-6px) scale(1.01)}
+
+    .hero img{width:100%;object-fit:contain}
+
+    .hero .clickable{
+      position:absolute;
+      inset:0;
+      border:0;
+      background:transparent;
+      cursor:pointer;
     }
 
-    .section{
-      margin-top:32px;
-      border-top:1px solid rgba(0,0,0,.08);
-      padding-top:18px
+    .hero-header h1{font-size:26px;font-weight:400;margin:0}
+    .hero-header p{
+      margin:6px 0 18px;
+      color:#444;
     }
 
-    .section h3{
-      text-align:center;
-      font-weight:400;
-      font-size:22px;
-      margin-bottom:16px
-    }
+    .section{margin-top:32px;border-top:1px solid rgba(0,0,0,.08);padding-top:18px}
+    .section h3{text-align:center;font-weight:400;font-size:22px;margin-bottom:16px}
 
-    .campaign-list{
-      display:flex;
-      justify-content:center;
-      flex-direction:column;
-      gap:22px;
-      align-items:center;
-    }
+    .campaign-list{display:flex;justify-content:center}
 
     .campaign-card{
       background:#fff;
@@ -89,38 +104,20 @@
       transition:.35s;
     }
 
-    .campaign-card.visible{
-      opacity:1;
-      transform:none
-    }
+    .campaign-card.visible{opacity:1;transform:none}
 
-    .campaign-media{
-      aspect-ratio:2/1
-    }
+    .campaign-media{aspect-ratio:2/1}
+    .campaign-media img{width:100%;object-fit:contain}
 
-    .campaign-media img{
-      width:100%;
-      object-fit:contain
-    }
-
-    .campaign-body{
-      padding:12px 16px;
-      text-align:center;
-    }
-
-    .campaign-body h3{
-      font-size:15px;
-      margin:0 0 6px
-    }
-
-    .campaign-body p{
-      font-size:13px;
-      color:#666;
-      margin:0 0 8px
-    }
+    .campaign-body{padding:10px 14px}
+    .campaign-body h3{font-size:15px;margin:0 0 4px}
+    .campaign-body p{font-size:13px;color:#666;text-align:center;margin:0}
 
     .campaign-links{
-      margin-top:6px;
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      margin-top:12px;
     }
 
     .campaign-link-btn{
@@ -131,14 +128,8 @@
       transition:.25s;
     }
 
-    .campaign-link-btn img{
-      width:100%;
-      display:block
-    }
-
-    .campaign-link-btn:hover{
-      transform:translateY(-3px) scale(1.04)
-    }
+    .campaign-link-btn img{width:100%;display:block}
+    .campaign-link-btn:hover{transform:translateY(-3px) scale(1.04)}
   </style>
 </head>
 <body>
@@ -154,6 +145,20 @@
 
 <div class="site">
 
+  <!-- CAMPANHA A DECORRER (DESATIVADA) -->
+  <!--
+  <div class="hero-header">
+    <div class="badge-new">Campanha a decorrer</div>
+    <h1 id="heroTitle"></h1>
+    <p id="heroSubtitle"></p>
+  </div>
+
+  <section class="hero" id="hero">
+    <img id="heroImg" src="imagem_campanha_botao.jpg">
+    <button class="clickable" id="heroBtn" aria-label="Ver campanha atual"></button>
+  </section>
+  -->
+
   <section class="section">
     <h3>Campanhas terminadas</h3>
     <div class="campaign-list" id="campaignList"></div>
@@ -162,18 +167,30 @@
 </div>
 
 <script>
+// CAMPANHA ATUAL (DESATIVADA)
+/*
+const current = {
+  title: 'Campanha OPPO Reno15 Pro 5G',
+  link: 'campanha.html'
+};
+
+document.getElementById('heroTitle').textContent = current.title;
+document.getElementById('heroBtn').onclick = () => {
+  window.location.href = current.link;
+};
+*/
+
 const previous = [
   {
     title: 'Campanha OPPO Reno15 Pro 5G',
     subtitle: 'Documento da campanha',
     image: 'imagem_campanha_botao.jpg',
-    textLink: `
-      <a href="./OPPO reno15 Pro 5G Oferta Watch S F.pdf"
-         target="_blank"
-         style="color:#00a884;text-decoration:underline;">
-        OPPO Reno15 Pro 5G
-      </a>
-    `
+    links: [
+      {
+        text: 'OPPO Reno15 Pro 5G',
+        href: './OPPO reno15 Pro 5G Oferta Watch S F.pdf'
+      }
+    ]
   },
   {
     title: 'Campanha Oppo Find X9 Pro',
@@ -188,50 +205,38 @@ const previous = [
 
 const list = document.getElementById('campaignList');
 
-previous.forEach(c => {
-  const card = document.createElement('article');
-  card.className = 'campaign-card';
+previous.forEach(c=>{
+  const card=document.createElement('article');
+  card.className='campaign-card';
 
-  let linksHtml = '';
+  const linksHtml = c.links.map(l=>{
+    if(l.img){
+      return `<a class="campaign-link-btn" href="${l.href}" target="_blank"><img src="${l.img}"></a>`;
+    }
+    return `<a href="${l.href}" target="_blank" style="color:#00a884;text-decoration:underline;">${l.text}</a>`;
+  }).join('');
 
-  if (c.textLink) {
-    linksHtml = `<div class="campaign-links">${c.textLink}</div>`;
-  } else if (c.links && c.links.length) {
-    linksHtml = `
-      <div class="campaign-links">
-        ${c.links.map(l => `
-          <a class="campaign-link-btn" href="${l.href}" target="_blank">
-            <img src="${l.img}">
-          </a>
-        `).join('')}
-      </div>
-    `;
-  }
-
-  card.innerHTML = `
-    <div class="campaign-media">
-      <img src="${c.image}">
-    </div>
+  card.innerHTML=`
+    <div class="campaign-media"><img src="${c.image}"></div>
     <div class="campaign-body">
       <h3>${c.title}</h3>
-      <p>${c.subtitle || ''}</p>
-      ${linksHtml}
+      <p>${c.subtitle}</p>
+      <div class="campaign-links">${linksHtml}</div>
     </div>
   `;
-
   list.appendChild(card);
 });
 
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
       e.target.classList.add('visible');
       io.unobserve(e.target);
     }
   });
 });
 
-document.querySelectorAll('.campaign-card').forEach(c => io.observe(c));
+document.querySelectorAll('.campaign-card').forEach(c=>io.observe(c));
 </script>
 
 </body>
