@@ -287,7 +287,7 @@
 .nav-logo{
   display: inline-flex;
   align-items: center;
-  gap: 10px;              /* espaço OPPO realista */
+  gap: 10px;
   text-decoration: none;
 }
 
@@ -330,7 +330,7 @@
 
 /* Dá espaço à direita do LOGO, não mexe no tamanho */
 .nav-logo img{
-  margin-right: 22px;   /* 👈 controla aqui o espaço */
+  margin-right: 6px;
 }
 
 
@@ -369,6 +369,108 @@
   margin-bottom:6px;
 }
 
+/* Layout principal da campanha */
+body{
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.wrapper{
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(600px, 660px);
+  gap: clamp(16px, 2vw, 24px);
+  align-items: center;
+  max-width: 1580px;
+  min-width: 0;
+  min-height: calc(100vh - 106px);
+  margin: 24px auto 32px;
+  padding: 0 6px 0 32px;
+  box-sizing: border-box;
+  background: none;
+}
+
+.wrapper::before{
+  content: none;
+}
+
+.hero{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.hero img{
+  display: block;
+  width: 100%;
+  max-width: 820px;
+  max-height: calc(100vh - 130px);
+  object-fit: contain;
+  object-position: left center;
+  height: auto;
+}
+
+.background{
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.container{
+  width: 100%;
+  max-width: 640px;
+  margin: 0;
+  transform: none;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1180px), (max-height: 820px) {
+  .wrapper{
+    grid-template-columns: 1fr;
+    gap: 20px;
+    min-height: auto;
+    margin: 16px auto 24px;
+    padding: 0 16px 16px;
+  }
+
+  .hero{
+    justify-content: center;
+  }
+
+  .hero img{
+    max-width: min(100%, 720px);
+    max-height: 42vh;
+    object-position: center top;
+  }
+
+  .background{
+    justify-content: center;
+  }
+
+  .container{
+    max-width: 680px;
+    padding: 24px 20px;
+    box-shadow: 0px 6px 18px rgba(0,0,0,0.12);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.95);
+  }
+}
+
+@media (max-width: 640px) {
+  .wrapper{
+    padding: 0 12px 16px;
+  }
+
+  .hero img{
+    max-height: 36vh;
+  }
+
+  .container{
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -388,9 +490,12 @@
       <div class="modal-content">
          <p id="modalMessage"></p>
          <button id="modalClose">OK</button>
-      </div>
+   </div>
    </div>
    <div class="wrapper">
+      <div class="hero">
+         <img src="./rosto_campanha_nova3.jpg" alt="Imagem promocional da campanha OPPO">
+      </div>
       <div class="background">
          <!-- Form lado direito -->
          <div class="container">
@@ -638,7 +743,7 @@
           const codigo_postal = document.getElementById("codigo_postal").value.trim();
           const localidade = document.getElementById("localidade").value.trim();
           const pais = document.getElementById("pais").value.trim();
-          const version = 2;
+          const version = 3;
           let morada = `${rua}, Nº ${porta}`;
           if (andar) morada += `, Andar ${andar}`;
           morada += `, ${codigo_postal} ${localidade}, ${pais}`;
