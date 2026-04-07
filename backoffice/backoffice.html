@@ -290,7 +290,7 @@ th.active-sort::after {
     <!-- Versão tabs -->
     <div class="tabs-container">
       <div class="tabs" id="versionTabs">
-        <button class="tab active" data-version="3" id="tabV3" role="tab" aria-selected="true">Nova campanha (<span id="countV3">0</span>)</button>
+        <button class="tab active" data-version="3" id="tabV3" role="tab" aria-selected="true">OPPO Campanha X9 Ultra (<span id="countV3">0</span>)</button>
         <button class="tab" data-version="2" id="tabV2" role="tab" aria-selected="true">OPPO Campanha Reno15 Pro (<span id="countV2">0</span>)</button>
         <button class="tab" data-version="1" id="tabV1" role="tab" aria-selected="false">OPPO Campanha X9 Pro (<span id="countV1">0</span>)</button>
       </div>
@@ -738,10 +738,13 @@ let submissaoAtualId = null;
 
 // Update version tab counts
 function updateVersionCounts(){
+  const v3 = submissõesGlobais.filter(s => s.version == 3).length;
   const v1 = submissõesGlobais.filter(s => s.version == 1).length;
   const v2 = submissõesGlobais.filter(s => s.version == 2).length;
+  const el3 = document.getElementById('countV3');
   const el1 = document.getElementById('countV1');
   const el2 = document.getElementById('countV2');
+  if(el3) el3.textContent = v3;
   if(el1) el1.textContent = v1;
   if(el2) el2.textContent = v2;
 }
