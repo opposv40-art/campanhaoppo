@@ -43,7 +43,7 @@
       height: 70px;
       transform: scale(1.35);
       transform-origin: left center;
-      margin-right: 33px;
+      margin-right: 16px;
     }
 
     .nav-logo .logo-text{
@@ -191,6 +191,15 @@ const previous = [
     ]
   }
 ];
+
+const currentCampaignUrl = './campanha.html';
+const heroBtn = document.getElementById('heroBtn');
+
+if (heroBtn) {
+  heroBtn.addEventListener('click', () => {
+    window.location.href = currentCampaignUrl;
+  });
+}
 
 const list = document.getElementById('campaignList');
 
