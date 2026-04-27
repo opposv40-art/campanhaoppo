@@ -16,7 +16,7 @@
 
    body {
     font-family: 'Montserrat', sans-serif;
-    background: #F8F3EF;
+    background: #FFFFFF;
     display: block;
     min-height: 50vh;
     margin: 0;
@@ -88,7 +88,7 @@
   margin-top: -1.7vh;
   background: url('./rosto_campanha_nova3.jpg') no-repeat center center;
   background-size: contain; /* mostra sempre a imagem inteira */
-  background-color: #F8F3EF; /* opcional: fundo branco por baixo da imagem */
+  background-color: #FFFFFF; /* igual ao fundo da imagem */
 }
 
   .container {
@@ -400,6 +400,12 @@ body{
   min-width: 0;
 }
 
+.hero picture{
+  display: block;
+  width: 100%;
+  max-width: 820px;
+}
+
 .hero img{
   display: block;
   width: 100%;
@@ -435,6 +441,10 @@ body{
 
   .hero{
     justify-content: center;
+  }
+
+  .hero picture{
+    max-width: min(100%, 720px);
   }
 
   .hero img{
@@ -494,7 +504,10 @@ body{
    </div>
    <div class="wrapper">
       <div class="hero">
-         <img src="./rosto_campanha_nova3.jpg" alt="Imagem promocional da campanha OPPO">
+         <picture>
+            <source media="(max-width: 1024px)" srcset="./banner_T&amp;C_KV_Find X9 Ultra_OFFER_1400x1100.png">
+            <img src="./rosto_campanha_nova4.png" alt="Imagem promocional da campanha OPPO">
+         </picture>
       </div>
       <div class="background">
          <!-- Form lado direito -->
@@ -538,7 +551,7 @@ body{
                <select id="loja" name="loja" required></select>
                <div style="display:flex; gap:8px;">
                   <div style="flex:1; min-width:90px;">
-                     <label for="fatura">Nº/Referência da Fatura:</label>
+                     <label for="fatura">Nº Referência/Nota da encomenda da Fatura:</label>
                      <input type="text" id="fatura" name="fatura" required>
                   </div>
                   <div style="flex:1; min-width:90px;">
@@ -568,7 +581,7 @@ body{
                   <div style="flex:1; min-width:150px; margin-top:-12px;">
                      <label for="aceito_rgpd" class="rgpd-label">
                      Li e aceito os termos e condições RGPD 
-                    <a href="./OPPO reno15 Pro 5G Oferta Watch S F.pdf" target="_blank" style="color:#00a884;text-decoration:underline;">OPPO Reno15 Pro 5G</a>
+                    <a href="./OPPO reno15 Pro 5G Oferta Watch S F.pdf" target="_blank" style="color:#00a884;text-decoration:underline;">OPPO Find X9 Ultra</a>
                      </label>
                   </div>
                </div>
