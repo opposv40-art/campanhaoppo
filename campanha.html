@@ -246,6 +246,18 @@
    margin-top: 8px;
    }
 
+   #imeiNotice {
+   display: none;
+   margin-top: 12px;
+   padding: 10px 12px;
+   border-radius: 10px;
+   background: #f4fbf8;
+   border: 1px solid rgba(0, 168, 132, 0.18);
+   color: #256454;
+   font-size: 0.95rem;
+   line-height: 1.45;
+   }
+
    .imei-field {
    display: flex;
    flex-direction: column;
@@ -570,6 +582,7 @@ body{
                </div>
                <label for="data_compra">Data e Hora da Fatura/Compra:</label>
                <input type="datetime-local" id="data_compra" name="data_compra" required>
+               <div id="imeiNotice"><strong>IMEIs opcionais ate 18 de Maio de 2026.</strong> Se ainda não os tiver, pode submeter o formulario sem os preencher.</div>
                <div id="imeiContainer"></div>
                <label for="file">Upload da Fatura:</label>
                <input type="file" id="file" name="file" accept=".jpg,.png,.pdf,.jpeg,.heif" required>
@@ -600,6 +613,7 @@ body{
    <script src="https://cdn.jsdelivr.net/npm/country-select-js@2.0.1/build/js/countrySelect.min.js"></script>
     <script>
       const dataLimiteCampanha = new Date("2026-01-10T23:59:00");
+      const dataLimiteIMEIOpcional = new Date("2026-05-18T23:59:59");
       // Inicializar intl-tel-input
       const telInput = document.querySelector("#telefone");
       const iti = window.intlTelInput(telInput, {
@@ -612,15 +626,21 @@ body{
       // --- Gerar campos IMEI dinamicamente ---
       const unidadesInput = document.getElementById("unidades");
       const imeiContainer = document.getElementById("imeiContainer");
+      const imeiNotice = document.getElementById("imeiNotice");
       imeiContainer.style.display = "none";
 
       const dataCompraInput = document.getElementById("data_compra");
+
+      function imeiObrigatorio() {
+          return new Date() > dataLimiteIMEIOpcional;
+      }
 
       // 🔹 Função que atualiza visibilidade e obrigatoriedade dos campos IMEI
       function atualizarCamposIMEI() {
           const dataCompraValor = dataCompraInput.value;
           if (!dataCompraValor) {
               imeiContainer.style.display = "none";
+              imeiNotice.style.display = "none";
               return;
           }
 
@@ -682,6 +702,32 @@ body{
           const qtd = parseInt(this.value) || 1;
           gerarCamposIMEI(qtd);
       });
+
+      function sincronizarRegraIMEI() {
+          const dataCompraValor = dataCompraInput.value;
+          if (!dataCompraValor) {
+              imeiNotice.style.display = "none";
+              return;
+          }
+
+          const dataCompra = new Date(dataCompraValor);
+          const obrigatorio = imeiObrigatorio();
+          const camposIMEI = document.querySelectorAll("#imeiContainer input");
+
+          if (dataCompra > dataLimiteCampanha && camposIMEI.length > 0) {
+              imeiNotice.style.display = obrigatorio ? "none" : "block";
+              camposIMEI.forEach(input => {
+                  input.required = obrigatorio;
+              });
+          } else {
+              imeiNotice.style.display = "none";
+          }
+      }
+
+      dataCompraInput.addEventListener("change", sincronizarRegraIMEI);
+      dataCompraInput.addEventListener("input", sincronizarRegraIMEI);
+      unidadesInput.addEventListener("input", sincronizarRegraIMEI);
+      sincronizarRegraIMEI();
 
       // Impedir letras no campo telefone
       telInput.addEventListener('input', function(e) {
@@ -746,6 +792,48 @@ body{
               onlyCountries: ['pt']
           });
       });
+
+      const oppoForm = document.getElementById("oppoForm");
+      oppoForm.addEventListener("submit", function(event) {
+          sincronizarRegraIMEI();
+
+          const dataCompraValor = dataCompraInput.value;
+          if (!dataCompraValor) {
+              return;
+          }
+
+          const dataCompra = new Date(dataCompraValor);
+          if (dataCompra <= dataLimiteCampanha || !imeiObrigatorio()) {
+              return;
+          }
+
+          let imeiEmFalta = false;
+          for (let i = 1; i <= parseInt(unidadesInput.value || "1"); i++) {
+              const imeiInput = document.getElementById(`imei${i}`);
+              if (!imeiInput || !imeiInput.value.trim()) {
+                  imeiEmFalta = true;
+                  break;
+              }
+          }
+
+          if (!imeiEmFalta) {
+              return;
+          }
+
+          event.preventDefault();
+          event.stopImmediatePropagation();
+
+          const modal = document.getElementById("errorModal");
+          const modalMessage = document.getElementById("modalMessage");
+          modalMessage.textContent = "Os IMEIs sao obrigatorios depois de 18 de Maio de 2026.";
+          modal.style.display = "flex";
+
+          const modalClose = document.getElementById("modalClose");
+          modalClose.onclick = function() {
+              modal.style.display = "none";
+          };
+      }, true);
+
       document.getElementById("oppoForm").addEventListener("submit", function(event) {
           event.preventDefault();
           // Preparar dados para JSON
