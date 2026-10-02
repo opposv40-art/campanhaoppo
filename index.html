@@ -93,12 +93,14 @@
       justify-content:center;
       gap:20px;
       flex-wrap:wrap;
-      align-items:flex-start;
+      align-items:stretch;
     }
 
     .campaign-card{
+      display:flex;
+      flex-direction:column;
       background:#fff;
-      width:460px;
+      width:min(460px, 100%);
       border-radius:10px;
       box-shadow:0 12px 26px rgba(0,0,0,.1);
       opacity:0;
@@ -108,29 +110,42 @@
 
     .campaign-card.visible{opacity:1;transform:none}
 
-    .campaign-media{aspect-ratio:2/1}
-    .campaign-media img{width:100%;object-fit:contain}
+    .campaign-media{
+      flex:0 0 auto;
+      aspect-ratio:2/1;
+      overflow:hidden;
+      background:#fff;
+    }
+    .campaign-media img{display:block;width:100%;height:100%;object-fit:contain}
 
-    .campaign-body{padding:10px 14px}
+    .campaign-body{display:flex;flex:1;flex-direction:column;padding:10px 14px}
     .campaign-body h3{font-size:15px;margin:0 0 4px}
     .campaign-body p{font-size:13px;color:#666;text-align:center;margin:0}
 
     .campaign-links{
       display:flex;
       justify-content:center;
+      align-items:flex-start;
       gap:14px;
       margin-top:12px;
     }
 
     .campaign-link-btn{
       width:175px;
+      height:175px;
+      flex:0 1 175px;
+      min-width:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       border-radius:12px;
       overflow:hidden;
+      background:#fff;
       box-shadow:0 6px 14px rgba(0,0,0,.12);
       transition:.25s;
     }
 
-    .campaign-link-btn img{width:100%;display:block}
+    .campaign-link-btn img{width:100%;height:100%;object-fit:contain;display:block}
     .campaign-link-btn:hover{transform:translateY(-3px) scale(1.04)}
   </style>
 </head>
@@ -170,6 +185,17 @@
 
 <script>
 const previous = [
+  {
+    title: 'Campanha OPPO Find X9 Ultra',
+    subtitle: 'Documentos e ofertas da campanha',
+    image: 'rosto_campanha_find_x9_ultra.png',
+    links: [
+      {
+        img: 'teleconversor_maio_2026.png',
+        href: './OPPO Find X9 Ultra_Termos e Condições.pdf'
+      }
+    ]
+  },
   {
     title: 'Campanha OPPO Reno15 Pro 5G',
     subtitle: 'Documentos e ofertas da campanha',
