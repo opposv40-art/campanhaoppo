@@ -7,146 +7,350 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root{--accent:#00a884;--bg:#f4f4f9;--max-width:1200px}
-    *{box-sizing:border-box}
-    body{font-family:Montserrat;background:var(--bg);margin:0;color:#111}
+    :root {
+      color-scheme: light;
+      --accent: #078768;
+      --accent-dark: #056b53;
+      --ink: #19231f;
+      --muted: #6d7772;
+      --line: rgba(25, 35, 31, .09);
+      --surface: #fff;
+      --max-width: 1160px;
+    }
 
-    .site{max-width:var(--max-width);margin:0 auto;padding:18px}
+    * { box-sizing: border-box; }
 
-    .header-nav-main{
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      color: var(--ink);
+      font-family: Montserrat, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      background:
+        radial-gradient(ellipse at 94% 0%, rgba(0, 168, 132, .09), transparent 34rem),
+        #f6f8f6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .header-nav-main {
       position: sticky;
       top: 0;
       z-index: 60;
-      height: 58px;
-      background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(2px);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+      height: 76px;
+      border-bottom: 1px solid rgba(25, 35, 31, .06);
+      background: rgba(255, 255, 255, .88);
+      backdrop-filter: blur(16px);
     }
 
-    .header-nav-main .nav-inner{
-      max-width: none;
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0 24px;
+    .header-nav-main .nav-inner {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      width: min(100%, 1240px);
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 30px;
     }
 
-    .nav-logo{
+    .nav-logo {
       display: inline-flex;
       align-items: center;
+      gap: 0;
+      color: inherit;
+      text-decoration: none;
     }
 
-    .nav-logo img{
-      height: 70px;
-      transform: scale(1.35);
-      transform-origin: left center;
-      margin-right: 16px;
+    .nav-logo img {
+      display: block;
+      width: 80px;
+      height: 80px;
+      margin-right: -6px;
+      object-fit: contain;
     }
 
-    .nav-logo .logo-text{
+    .nav-logo .logo-text {
+      color: #34413b;
       font-size: 15px;
-      font-weight: 370;
-      line-height: 2;
-      color: #000;
+      font-weight: 400;
       white-space: nowrap;
     }
 
-    .badge-new{
-      display:inline-block;padding:6px 12px;border-radius:999px;
-      font-size:13px;font-weight:700;color:#fff;
-      background:linear-gradient(135deg,#00e6a8 0%,#00c896 40%,#00a884 100%);
-      box-shadow:0 8px 22px rgba(0,168,132,.25);
-      margin-bottom:6px;
+    .site {
+      width: min(100%, var(--max-width));
+      margin: 0 auto;
+      padding: clamp(38px, 5vw, 64px) 28px 88px;
     }
 
-    .hero{
-      position:relative;
-      border-radius:10px;
-      overflow:hidden;
-      background:#fff;
-      box-shadow:0 20px 48px rgba(15,22,35,.1);
-      transition:.3s;
-    }
-    .hero:hover{transform:translateY(-6px) scale(1.01)}
-
-    .hero img{width:100%;object-fit:contain}
-
-    .hero .clickable{
-      position:absolute;
-      inset:0;
-      border:0;
-      background:transparent;
-      cursor:pointer;
+    .hero-header {
+      margin: 0 0 24px;
     }
 
-    .hero-header h1{font-size:26px;font-weight:400;margin:0}
-    .hero-header p{margin:6px 0 18px;color:#444}
-
-    .section{margin-top:32px;border-top:1px solid rgba(0,0,0,.08);padding-top:18px}
-    .section h3{text-align:center;font-weight:400;font-size:22px;margin-bottom:16px}
-
-    .campaign-list{
-      display:flex;
-      justify-content:center;
-      gap:20px;
-      flex-wrap:wrap;
-      align-items:stretch;
+    .badge-new {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 14px;
+      padding: 7px 12px;
+      border: 1px solid rgba(7, 135, 104, .14);
+      border-radius: 999px;
+      color: var(--accent-dark);
+      background: rgba(7, 135, 104, .07);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      line-height: 1;
+      text-transform: uppercase;
     }
 
-    .campaign-card{
-      display:flex;
-      flex-direction:column;
-      background:#fff;
-      width:min(460px, 100%);
-      border-radius:10px;
-      box-shadow:0 12px 26px rgba(0,0,0,.1);
-      opacity:0;
-      transform:translateY(16px);
-      transition:.35s;
+    .badge-new::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #0da779;
+      box-shadow: 0 0 0 3px rgba(13, 167, 121, .12);
+      content: "";
     }
 
-    .campaign-card.visible{opacity:1;transform:none}
-
-    .campaign-media{
-      flex:0 0 auto;
-      aspect-ratio:2/1;
-      overflow:hidden;
-      background:#fff;
-    }
-    .campaign-media img{display:block;width:100%;height:100%;object-fit:contain}
-
-    .campaign-body{display:flex;flex:1;flex-direction:column;padding:10px 14px}
-    .campaign-body h3{font-size:15px;margin:0 0 4px}
-    .campaign-body p{font-size:13px;color:#666;text-align:center;margin:0}
-
-    .campaign-links{
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
-      gap:14px;
-      margin-top:12px;
+    .hero-header h1 {
+      max-width: 760px;
+      margin: 0;
+      color: #17231e;
+      font-size: clamp(30px, 4vw, 46px);
+      font-weight: 500;
+      letter-spacing: -.045em;
+      line-height: 1.14;
     }
 
-    .campaign-link-btn{
-      width:175px;
-      height:175px;
-      flex:0 1 175px;
-      min-width:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border-radius:12px;
-      overflow:hidden;
-      background:#fff;
-      box-shadow:0 6px 14px rgba(0,0,0,.12);
-      transition:.25s;
+    .hero-header p {
+      max-width: 600px;
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 15px;
     }
 
-    .campaign-link-btn img{width:100%;height:100%;object-fit:contain;display:block}
-    .campaign-link-btn:hover{transform:translateY(-3px) scale(1.04)}
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(25, 35, 31, .08);
+      border-radius: 24px;
+      background: var(--surface);
+      box-shadow: 0 20px 58px rgba(28, 48, 39, .10), 0 2px 8px rgba(28, 48, 39, .04);
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    .hero img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .hero .clickable {
+      position: absolute;
+      inset: 0;
+      border: 0;
+      border-radius: inherit;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .hero .clickable:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: -5px;
+    }
+
+    @media (hover: hover) {
+      .hero:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 26px 68px rgba(28, 48, 39, .14), 0 3px 10px rgba(28, 48, 39, .05);
+      }
+    }
+
+    .section {
+      margin-top: 76px;
+      padding-top: 32px;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-header {
+      margin-bottom: 26px;
+    }
+
+    .section-eyebrow {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--accent-dark);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .section-header h2 {
+      margin: 0;
+      color: #1b2822;
+      font-size: clamp(24px, 3vw, 30px);
+      font-weight: 500;
+      letter-spacing: -.035em;
+      line-height: 1.2;
+    }
+
+    .section-header p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .campaign-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: stretch;
+      gap: 18px;
+    }
+
+    .campaign-card {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid rgba(25, 35, 31, .08);
+      border-radius: 19px;
+      background: var(--surface);
+      box-shadow: 0 8px 26px rgba(28, 48, 39, .055);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity .45s ease, transform .45s ease, box-shadow .25s ease;
+    }
+
+    .campaign-card.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .campaign-media {
+      flex: 0 0 auto;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      border-bottom: 1px solid rgba(25, 35, 31, .05);
+      background: #f4f5f2;
+    }
+
+    .campaign-media img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .campaign-body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 20px 20px 18px;
+    }
+
+    .campaign-body h3 {
+      margin: 0 0 5px;
+      color: #202c26;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -.015em;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    .campaign-body p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: left;
+    }
+
+    .campaign-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .campaign-link-btn {
+      display: flex;
+      width: 100%;
+      max-width: 176px;
+      flex: 1 1 132px;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      aspect-ratio: 1;
+      padding: 8px;
+      border: 1px solid rgba(25, 35, 31, .08);
+      border-radius: 14px;
+      background: #fafbf9;
+      transition: border-color .2s ease, background .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    .campaign-link-btn img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .campaign-link-btn:focus-visible {
+      outline: 3px solid rgba(7, 135, 104, .55);
+      outline-offset: 3px;
+    }
+
+    @media (hover: hover) {
+      .campaign-card:hover {
+        box-shadow: 0 14px 34px rgba(28, 48, 39, .10);
+      }
+
+      .campaign-link-btn:hover {
+        transform: translateY(-2px);
+        border-color: rgba(7, 135, 104, .35);
+        background: #fff;
+        box-shadow: 0 8px 18px rgba(28, 48, 39, .08);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .campaign-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .header-nav-main { height: 64px; }
+      .header-nav-main .nav-inner { padding: 0 20px; }
+      .nav-logo img { width: 62px; height: 62px; }
+
+      .site { padding: 36px 18px 64px; }
+      .hero-header { margin-bottom: 19px; }
+      .hero-header h1 { font-size: clamp(29px, 8vw, 38px); }
+      .hero-header p { margin-top: 9px; font-size: 14px; }
+      .hero { border-radius: 17px; }
+
+      .section { margin-top: 58px; padding-top: 26px; }
+      .section-header { margin-bottom: 20px; }
+      .campaign-list { grid-template-columns: minmax(0, 1fr); gap: 15px; }
+      .campaign-card { border-radius: 17px; }
+      .campaign-body { padding: 18px; }
+      .campaign-link-btn { flex-basis: 138px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -154,34 +358,38 @@
 <header class="header-nav-main">
   <div class="nav-inner">
     <a class="nav-logo">
-      <img src="oppo-logo-0.png">
+      <img src="oppo-logo-0.png" alt="OPPO">
       <span class="logo-text">Campanhas</span>
     </a>
   </div>
 </header>
 
-<div class="site">
+<main class="site">
 
-  <!-- CAMPANHA A DECORRER DESATIVADA
+  <!--
   <div class="hero-header">
     <div class="badge-new">Campanha a decorrer</div>
-    <h1 id="heroTitle"></h1>
-    <p id="heroSubtitle"></p>
+    <h1 id="heroTitle">Campanhas OPPO em destaque</h1>
+    <p id="heroSubtitle">Explora as ofertas atuais e consulta todos os detalhes da campanha.</p>
   </div>
-
+  
   <section class="hero" id="hero">
-    <img id="heroImg" src="imagem_campanha_botao_2.png">
+    <img id="heroImg" src="imagem_campanha_botao_3.jpg">
     <button class="clickable" id="heroBtn" aria-label="Ver campanha atual"></button>
   </section>
   -->
 
 
-  <section class="section">
-    <h3>Campanhas terminadas</h3>
+  <section class="section" aria-labelledby="previousCampaignsTitle">
+    <div class="section-header">
+      <span class="section-eyebrow">Arquivo de campanhas</span>
+      <h2 id="previousCampaignsTitle">Campanhas terminadas</h2>
+      <p>Revisita as ofertas e consulta os documentos das campanhas anteriores.</p>
+    </div>
     <div class="campaign-list" id="campaignList"></div>
   </section>
 
-</div>
+</main>
 
 <script>
 const previous = [
@@ -218,7 +426,7 @@ const previous = [
   }
 ];
 
-/*
+
 const currentCampaignUrl = './campanha.html';
 const heroBtn = document.getElementById('heroBtn');
 
@@ -227,7 +435,6 @@ if (heroBtn) {
     window.location.href = currentCampaignUrl;
   });
 }
-*/
 
 const list = document.getElementById('campaignList');
 
