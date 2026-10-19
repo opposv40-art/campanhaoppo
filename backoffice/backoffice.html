@@ -305,15 +305,16 @@ th.active-sort::after {
     <th class="sortable" onclick="ordenarTabela(2)">Nome</th>
     <th class="sortable" onclick="ordenarTabela(3)">Email</th>
     <th class="sortable" onclick="ordenarTabela(4)">Telefone</th>
-    <th class="sortable" onclick="ordenarTabela(5)">Data Compra</th>
-    <th class="sortable" onclick="ordenarTabela(6)">Fatura</th>
-    <th class="sortable" onclick="ordenarTabela(7)">Loja</th>
-    <th class="sortable" onclick="ordenarTabela(8)">Data Submissão</th>
-    <th class="sortable" onclick="ordenarTabela(9)">Unidades</th>
-    <th class="sortable" onclick="ordenarTabela(10)">IMEIs</th>
-    <th class="sortable" onclick="ordenarTabela(11)">Anexos</th>
-    <th class="sortable" onclick="ordenarTabela(12)">Observações</th>
-    <th class="sortable" onclick="ordenarTabela(13)">Email Vencedor</th>
+    <th class="sortable" onclick="ordenarTabela(5)">Modelo do telemóvel</th>
+    <th class="sortable" onclick="ordenarTabela(6)">Data Compra</th>
+    <th class="sortable" onclick="ordenarTabela(7)">Fatura</th>
+    <th class="sortable" onclick="ordenarTabela(8)">Loja</th>
+    <th class="sortable" onclick="ordenarTabela(9)">Data Submissão</th>
+    <th class="sortable" onclick="ordenarTabela(10)">Unidades</th>
+    <th class="sortable" onclick="ordenarTabela(11)">IMEIs</th>
+    <th class="sortable" onclick="ordenarTabela(12)">Anexos</th>
+    <th class="sortable" onclick="ordenarTabela(13)">Observações</th>
+    <th class="sortable" onclick="ordenarTabela(14)">Email Vencedor</th>
   </tr>
 </thead>
       <tbody></tbody>
@@ -326,6 +327,10 @@ th.active-sort::after {
   </div>
 
   <script>
+// Altere este valor para apontar os pedidos para o ambiente local durante os testes.
+const API_BASE_URL = "https://93q4xmungw.eu-west-1.awsapprunner.com";
+//const API_BASE_URL = "http://localhost:8000";
+
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("refresh_token");
@@ -346,7 +351,7 @@ async function fetchComAuth(url, options = {}) {
   let response = await fetch(url, { ...options, headers });
 
   if (response.status === 401 && refreshToken) {
-    const refreshResponse = await fetch("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/refresh-token", {
+    const refreshResponse = await fetch(`${API_BASE_URL}/api/externos/refresh-token`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh_token: refreshToken }),
@@ -379,7 +384,7 @@ let submissõesGlobais = [];
 // 🔹 Carregar submissões
 async function carregarSubmissoes() {
   try {
-    const response = await fetchComAuth("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/list");
+    const response = await fetchComAuth(`${API_BASE_URL}/api/externos/campanhaoppo/list`);
     if (!response.ok) throw new Error("Erro ao obter submissões");
 
     const data = await response.json();
@@ -427,6 +432,7 @@ function renderTabela(lista) {
       <td>${sub.nome || ""}</td>
       <td>${sub.email || ""}</td>
       <td>${sub.telefone || ""}</td>
+      <td>${sub.phone_model || ""}</td>
       <td>${new Date(sub.data_compra).toLocaleString("pt-PT")}</td>
       <td>${sub.fatura || ""}</td>
       <td>${sub.loja || ""}</td>
@@ -503,11 +509,11 @@ async function enviarEmail() {
         id,
         nome: linha.cells[2].textContent,
         email: linha.cells[3].textContent,
-        loja: linha.cells[7].textContent,
-        dataCompra: linha.cells[8].textContent,
+        loja: linha.cells[8].textContent,
+        dataCompra: linha.cells[9].textContent,
         telefone: linha.cells[4].textContent,
-        unidades: linha.cells[9].textContent,
-        imeis: linha.cells[10].textContent,
+        unidades: linha.cells[10].textContent,
+        imeis: linha.cells[11].textContent,
         status
       });
     }
@@ -520,7 +526,7 @@ async function enviarEmail() {
 
   try {
     const ids = selecionados.map(s => s.id);
-    const response = await fetchComAuth("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/winners", {
+    const response = await fetchComAuth(`${API_BASE_URL}/api/externos/campanhaoppo/winners`, {
       method: "POST",
       body: JSON.stringify({ ids }),
     });
@@ -587,11 +593,11 @@ async function enviarEmailSelecionados() {
         id: linha.dataset.id,
         nome: linha.cells[2].textContent,
         email: linha.cells[3].textContent,
-        loja: linha.cells[7].textContent,
-        dataCompra: linha.cells[8].textContent,
+        loja: linha.cells[8].textContent,
+        dataCompra: linha.cells[9].textContent,
         telefone: linha.cells[4].textContent,
-        unidades: linha.cells[9].textContent,
-        imeis: linha.cells[10].textContent,
+        unidades: linha.cells[10].textContent,
+        imeis: linha.cells[11].textContent,
         status: statusEl
       });
     }
@@ -652,7 +658,7 @@ async function exportarExcel() {
     const activeTab = document.querySelector('.tab.active');
     const selectedVersion = activeTab ? activeTab.dataset.version : null;
     // append version as query param so backend can return only that version
-    const url2 = selectedVersion ? `https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/export?version=${encodeURIComponent(selectedVersion)}` : "https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/export";
+    const url2 = selectedVersion ? `${API_BASE_URL}/api/externos/campanhaoppo/export?version=${encodeURIComponent(selectedVersion)}` : `${API_BASE_URL}/api/externos/campanhaoppo/export`;
 
     const response = await fetch(url2, {
       method: "GET",
@@ -787,7 +793,7 @@ async function guardarObservacao() {
   if (!submissaoAtualId) return;
 
   try {
-    const response = await fetchComAuth("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/campanhaoppo/admin-notes", {
+    const response = await fetchComAuth(`${API_BASE_URL}/api/externos/campanhaoppo/admin-notes`, {
       method: "POST",
       body: JSON.stringify({
         submission_id: submissaoAtualId,
