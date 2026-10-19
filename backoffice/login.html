@@ -75,6 +75,10 @@
   </div>
 
   <script>
+    // Altere este valor para apontar os pedidos para o ambiente local durante os testes.
+    const API_BASE_URL = "https://93q4xmungw.eu-west-1.awsapprunner.com";
+    //const API_BASE_URL = "http://localhost:8000";
+
     async function fazerLogin() {
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value.trim();
@@ -87,7 +91,7 @@
       }
 
       try {
-        const resp = await fetch("https://93q4xmungw.eu-west-1.awsapprunner.com/api/externos/login", {
+        const resp = await fetch(`${API_BASE_URL}/api/externos/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password })
