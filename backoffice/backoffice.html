@@ -388,7 +388,33 @@ async function carregarSubmissoes() {
     if (!response.ok) throw new Error("Erro ao obter submissões");
 
     const data = await response.json();
-    submissõesGlobais = data.submissoes;
+    submissõesGlobais = Array.isArray(data.submissoes) ? data.submissoes : [];
+
+    // Consultar também a versão 4 diretamente e complementar a listagem geral.
+    try {
+      const responseV4 = await fetchComAuth(`${API_BASE_URL}/api/externos/campanhaoppo/list?version=4`);
+      if (!responseV4.ok) throw new Error(`Erro ao obter submissões da versão 4 (${responseV4.status})`);
+
+      const dataV4 = await responseV4.json();
+      const submissõesV4 = Array.isArray(dataV4.submissoes)
+        ? dataV4.submissoes.filter(sub => Number(sub.version) === 4)
+        : [];
+      const idsExistentes = new Set(
+        submissõesGlobais
+          .filter(sub => sub.id !== undefined && sub.id !== null)
+          .map(sub => String(sub.id))
+      );
+
+      submissõesV4.forEach(sub => {
+        if (sub.id === undefined || sub.id === null || !idsExistentes.has(String(sub.id))) {
+          submissõesGlobais.push(sub);
+          if (sub.id !== undefined && sub.id !== null) idsExistentes.add(String(sub.id));
+        }
+      });
+    } catch (errV4) {
+      console.warn("Não foi possível carregar submissões da versão 4:", errV4);
+    }
+
     // Update counts and render according to active tab and filters
     updateVersionCounts();
     filtrarSubmissoes();
